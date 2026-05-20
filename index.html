@@ -515,8 +515,12 @@ h1 .accent{color:var(--accent)}
 @media(max-width:620px){
   .form-grid{grid-template-columns:1fr}
   .full{grid-column:1}
-  .stepper{padding:.6rem .75rem}
-  .step-label{display:none}
+  .stepper{gap:6px;padding:.65rem .75rem;flex-direction:column;align-items:stretch}
+  .step-item{gap:8px;padding:.45rem .6rem;justify-content:flex-start;flex:none}
+  .step-label{font-size:12px;white-space:nowrap}
+  .step-num{width:26px;height:26px;font-size:10px;flex-shrink:0}
+  .step-num-inner::before{font-size:12px!important}
+  .step-divider{width:auto;height:1px;margin:0 .5rem}
   h1{font-size:1.9rem}
   .header-bg-text{font-size:5rem}
   .app{padding:1.25rem 1rem 4rem}
