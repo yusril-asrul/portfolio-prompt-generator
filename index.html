@@ -1169,7 +1169,6 @@ SECTION YANG DIBUTUHKAN (8 section + footer)
    - Foto profil placeholder (https://placehold.co/400x400) dengan clip-path atau shape unik
    - Bio dari deskripsi, dikembangkan jadi 3-4 kalimat hangat dan personal
    - 3 card keunggulan sesuai data di atas
-   - Tombol "Download CV" → ${cv}
    - Angka statistik (sesuaikan agar realistis untuk ${profesi})
 
 4. LAYANAN
@@ -1194,8 +1193,6 @@ SECTION YANG DIBUTUHKAN (8 section + footer)
    - Layout grid 3 kolom atau slider horizontal
 
 8. KONTAK
-   - Form: Nama, Email, WhatsApp (opsional), Subjek, Pesan, tombol Kirim
-   - Validasi JS native, pesan sukses tanpa browser alert
    - Info kontak: Email ${email}${wa !== '(tidak ada)' ? ', WhatsApp ' + wa : ''}, Kota ${kota}, Jam ${jamkerja}
    ${wa !== '(tidak ada)' ? '- Tombol "Chat via WhatsApp" → wa.me/' + wa.replace(/[^0-9]/g,'') : ''}
 
