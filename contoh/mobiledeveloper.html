@@ -1,0 +1,1088 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Fajar Nugraha — Mobile App Developer. Membangun aplikasi mobile yang cepat, indah, dan andal." />
+<title>Fajar Nugraha · Mobile App Developer</title>
+
+<!-- Google Fonts: Fraunces (display, karakter kuat) + Manrope (body, bersih) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;0,9..144,900;1,9..144,600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ===RESET & ROOT=== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#12100E;
+  --surface:#1C1916;
+  --surface-2:#221F1B;
+  --gold:#EAB308;
+  --gold-soft:#facc15;
+  --gold-dim:#a98208;
+  --line:#2a2622;
+  --text:#f5f1e8;
+  --text-dim:#a39e93;
+  --text-mute:#6b675f;
+  --shadow-gold:0 0 0 1px rgba(234,179,8,.25), 0 12px 40px -12px rgba(234,179,8,.35);
+  --maxw:1240px;
+  --pad:clamp(20px,4vw,40px);
+}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'Manrope',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-weight:400;
+  line-height:1.6;
+  overflow-x:hidden;
+  position:relative;
+  min-height:100vh;
+}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+::selection{background:var(--gold);color:#12100E}
+
+/* Custom scrollbar */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--gold-dim),var(--gold));border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-soft)}
+
+/* ===GLOBAL GRADIENT MESH BG=== */
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  z-index:-2;
+  background:
+    radial-gradient(60% 50% at 12% 8%, rgba(234,179,8,.18), transparent 60%),
+    radial-gradient(45% 40% at 92% 18%, rgba(234,179,8,.10), transparent 65%),
+    radial-gradient(55% 50% at 78% 96%, rgba(234,179,8,.14), transparent 60%),
+    radial-gradient(40% 35% at 20% 88%, rgba(234,179,8,.08), transparent 65%),
+    var(--bg);
+  pointer-events:none;
+}
+body::after{
+  content:"";
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(234,179,8,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(234,179,8,.045) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 30%, #000 30%, transparent 80%);
+}
+
+/* Reusable */
+.container{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad)}
+.section{padding:clamp(80px,12vw,140px) 0;position:relative}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Manrope';font-size:12px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.22em;
+  color:var(--gold);
+  padding:8px 14px;
+  border:1px solid rgba(234,179,8,.35);
+  background:rgba(234,179,8,.06);
+}
+.eyebrow::before{content:"";width:6px;height:6px;background:var(--gold);display:inline-block}
+.section-title{
+  font-family:'Fraunces',serif;
+  font-weight:800;
+  font-size:clamp(36px,5.5vw,64px);
+  line-height:1.02;
+  letter-spacing:-.02em;
+  margin-top:18px;
+  max-width:18ch;
+}
+.section-title em{font-style:italic;font-weight:600;color:var(--gold)}
+.section-sub{
+  margin-top:18px;color:var(--text-dim);
+  font-size:clamp(15px,1.4vw,17px);max-width:62ch;
+}
+.section-head{margin-bottom:64px}
+
+/* ===NAVBAR=== */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  transition:background .35s ease,backdrop-filter .35s ease,border-color .35s ease;
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{
+  background:rgba(18,16,14,.65);
+  backdrop-filter:blur(18px) saturate(140%);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px var(--pad);max-width:var(--maxw);margin-inline:auto;
+}
+.logo{
+  font-family:'Fraunces',serif;font-weight:800;font-size:22px;letter-spacing:-.02em;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.logo-mark{
+  width:30px;height:30px;background:var(--gold);
+  display:grid;place-items:center;color:#12100E;font-size:14px;font-weight:900;
+  font-family:'Manrope';
+  transform:rotate(45deg);
+}
+.logo-mark span{transform:rotate(-45deg)}
+.nav-menu{display:flex;gap:6px;align-items:center}
+.nav-menu a{
+  font-size:14px;font-weight:500;color:var(--text-dim);
+  padding:10px 16px;position:relative;transition:color .25s ease;
+}
+.nav-menu a:hover{color:var(--text)}
+.nav-menu a.active{color:var(--gold)}
+.nav-menu a.active::after{
+  content:"";position:absolute;left:16px;right:16px;bottom:4px;
+  height:2px;background:var(--gold);
+}
+.nav-cta{
+  margin-left:8px;padding:10px 18px;border:1px solid var(--gold);
+  color:var(--gold);font-size:13px;font-weight:600;letter-spacing:.02em;
+  transition:all .25s ease;
+}
+.nav-cta:hover{background:var(--gold);color:#12100E}
+.burger{
+  display:none;width:42px;height:42px;border:1px solid var(--line);
+  flex-direction:column;justify-content:center;align-items:center;gap:5px;
+}
+.burger span{width:18px;height:2px;background:var(--text);transition:transform .3s ease,opacity .3s ease}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ===HERO=== */
+.hero{padding:160px 0 100px;position:relative;overflow:hidden}
+.hero-grid{
+  display:grid;grid-template-columns:1.3fr .9fr;gap:60px;align-items:center;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:8px 14px;border:1px solid var(--line);background:var(--surface);
+  font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);
+}
+.dot{width:8px;height:8px;background:#22c55e;border-radius:50%;box-shadow:0 0 0 4px rgba(34,197,94,.18)}
+.hero h1{
+  font-family:'Fraunces',serif;font-weight:900;
+  font-size:clamp(44px,7.5vw,96px);
+  line-height:.96;letter-spacing:-.035em;
+  margin-top:24px;
+}
+.hero h1 .accent{color:var(--gold);font-style:italic;font-weight:600}
+.hero h1 .strike{
+  display:inline-block;position:relative;
+}
+.hero p.lead{
+  margin-top:28px;color:var(--text-dim);font-size:clamp(16px,1.55vw,19px);
+  max-width:56ch;line-height:1.6;
+}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:16px 28px;font-size:14px;font-weight:600;letter-spacing:.02em;
+  transition:transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+  border:1px solid transparent;position:relative;
+}
+.btn-primary{background:var(--gold);color:#12100E}
+.btn-primary:hover{box-shadow:var(--shadow-gold);transform:translateY(-2px)}
+.btn-ghost{border-color:var(--line);color:var(--text)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+.btn svg{width:16px;height:16px}
+
+/* Hero side: phone mockup */
+.hero-visual{
+  position:relative;display:flex;justify-content:center;align-items:center;
+  min-height:520px;
+}
+.phone{
+  position:relative;width:260px;height:520px;background:#0a0907;
+  border:1px solid var(--line);
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.7), 0 0 0 1px rgba(234,179,8,.15);
+  padding:14px;
+  transform:rotate(-6deg);
+  animation:float 6s ease-in-out infinite;
+}
+.phone::before{
+  content:"";position:absolute;top:18px;left:50%;transform:translateX(-50%);
+  width:60px;height:8px;background:#000;border-radius:6px;z-index:2;
+}
+.phone-screen{
+  width:100%;height:100%;background:linear-gradient(180deg,#1C1916,#12100E);
+  padding:46px 14px 14px;display:flex;flex-direction:column;gap:10px;
+  border:1px solid #2a2622;
+}
+.phone-screen .row{height:42px;background:var(--surface-2);border-left:2px solid var(--gold)}
+.phone-screen .row.h{background:linear-gradient(90deg,rgba(234,179,8,.18),rgba(234,179,8,0));height:60px;border-left:2px solid var(--gold)}
+.phone-screen .row.s{height:28px;width:60%}
+.phone-screen .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.phone-screen .grid2 div{height:70px;background:var(--surface-2);border:1px solid var(--line)}
+.phone-screen .grid2 div:first-child{background:var(--gold);color:#12100E}
+.float-card{
+  position:absolute;background:rgba(28,25,22,.85);backdrop-filter:blur(10px);
+  border:1px solid var(--line);padding:14px 16px;font-size:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.float-card.a{top:8%;left:-10%;animation:float 5s ease-in-out infinite}
+.float-card.b{bottom:8%;right:-8%;animation:float 7s ease-in-out infinite reverse}
+.float-card .pill{
+  width:34px;height:34px;background:var(--gold);color:#12100E;
+  display:grid;place-items:center;font-weight:800;font-family:'Fraunces';
+}
+.float-card .label{font-size:10px;color:var(--text-mute);text-transform:uppercase;letter-spacing:.12em}
+.float-card .val{font-size:14px;font-weight:600;color:var(--text)}
+
+@keyframes float{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-14px) rotate(-6deg)}}
+.float-card.a,.float-card.b{animation-name:floatcard}
+@keyframes floatcard{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+/* Hero marquee */
+.marquee{
+  margin-top:90px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:18px 0;overflow:hidden;white-space:nowrap;
+  background:rgba(28,25,22,.4);
+}
+.marquee-track{display:inline-flex;gap:60px;animation:scroll 28s linear infinite;align-items:center}
+.marquee span{
+  font-family:'Fraunces';font-weight:600;font-size:22px;color:var(--text-dim);
+  display:inline-flex;align-items:center;gap:60px;
+}
+.marquee span::after{content:"✦";color:var(--gold);font-size:14px;margin-left:60px}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ===ABOUT=== */
+.about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:64px;align-items:start}
+.about-photo{position:relative}
+.about-photo img{width:100%;aspect-ratio:1/1;object-fit:cover;border:1px solid var(--line)}
+.about-photo::before{
+  content:"";position:absolute;inset:18px -18px -18px 18px;
+  border:1px solid var(--gold);z-index:-1;
+}
+.photo-badge{
+  position:absolute;bottom:-18px;left:-18px;
+  background:var(--gold);color:#12100E;padding:14px 18px;
+  font-family:'Fraunces';font-weight:800;font-size:18px;
+}
+.photo-badge small{display:block;font-family:'Manrope';font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;opacity:.7}
+.bio p{color:var(--text-dim);font-size:16px;margin-top:18px;max-width:60ch}
+.bio p:first-of-type{color:var(--text);font-size:18px;font-weight:500}
+.adv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:36px}
+.adv-card{
+  border:1px solid var(--line);background:var(--surface);
+  padding:22px;transition:transform .3s ease, border-color .3s ease, background .3s ease;
+}
+.adv-card:hover{transform:translateY(-4px);border-color:var(--gold);background:var(--surface-2)}
+.adv-num{font-family:'Fraunces';font-size:14px;color:var(--gold);font-weight:700;letter-spacing:.12em}
+.adv-card h4{font-family:'Fraunces';font-size:20px;font-weight:700;margin-top:8px;letter-spacing:-.01em}
+.adv-card p{color:var(--text-dim);font-size:13.5px;margin-top:8px}
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  margin-top:48px;border:1px solid var(--line);
+}
+.stat{padding:24px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat .n{font-family:'Fraunces';font-size:clamp(28px,3.4vw,40px);font-weight:800;color:var(--gold);letter-spacing:-.02em}
+.stat .l{font-size:11px;color:var(--text-mute);text-transform:uppercase;letter-spacing:.16em;margin-top:6px}
+
+/* ===SERVICES=== */
+.services-head{display:grid;grid-template-columns:1.2fr 1fr;gap:60px;align-items:end}
+.services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:50px}
+.svc-card{
+  position:relative;border:1px solid var(--line);background:var(--surface);
+  padding:36px;overflow:hidden;
+  transition:transform .35s ease, border-color .35s ease, background .35s ease;
+}
+.svc-card::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 100% 0%, rgba(234,179,8,.12), transparent 50%);
+  opacity:0;transition:opacity .4s ease;pointer-events:none;
+}
+.svc-card:hover{transform:translateY(-6px);border-color:var(--gold);background:var(--surface-2)}
+.svc-card:hover::after{opacity:1}
+.svc-icon{
+  width:56px;height:56px;display:grid;place-items:center;
+  background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.3);
+  color:var(--gold);
+}
+.svc-icon svg{width:28px;height:28px}
+.svc-card h3{font-family:'Fraunces';font-size:28px;font-weight:700;margin-top:24px;letter-spacing:-.02em}
+.svc-card p{color:var(--text-dim);margin-top:12px;font-size:15px}
+.svc-list{margin-top:22px;display:flex;flex-direction:column;gap:10px}
+.svc-list li{
+  list-style:none;display:flex;align-items:center;gap:10px;
+  color:var(--text);font-size:14px;
+  padding:10px 0;border-top:1px solid var(--line);
+}
+.svc-list li::before{content:"";width:14px;height:2px;background:var(--gold);flex-shrink:0}
+.svc-cta{
+  margin-top:48px;border:1px solid var(--line);background:var(--surface);
+  padding:30px 36px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;
+}
+.svc-cta h4{font-family:'Fraunces';font-size:22px;font-weight:700}
+.svc-cta p{color:var(--text-dim);font-size:14px;margin-top:4px}
+
+/* ===PROCESS=== */
+.process-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:60px;
+  position:relative;
+}
+.process-grid::before{
+  content:"";position:absolute;top:38px;left:5%;right:5%;height:1px;
+  background:repeating-linear-gradient(90deg,var(--gold) 0 8px,transparent 8px 16px);
+}
+.step{
+  padding:0 22px 0 0;position:relative;
+  opacity:0;transform:translateY(20px);transition:all .6s ease;
+}
+.step.in{opacity:1;transform:translateY(0)}
+.step-num{
+  width:76px;height:76px;background:var(--bg);border:1px solid var(--gold);
+  display:grid;place-items:center;
+  font-family:'Fraunces';font-size:32px;font-weight:800;color:var(--gold);
+  position:relative;z-index:2;
+}
+.step-icon{
+  margin-top:24px;width:40px;height:40px;color:var(--gold);
+}
+.step h4{font-family:'Fraunces';font-size:22px;font-weight:700;margin-top:14px;letter-spacing:-.01em}
+.step p{color:var(--text-dim);font-size:14px;margin-top:8px;max-width:24ch}
+
+/* ===PORTFOLIO=== */
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:32px}
+.filter-btn{
+  padding:10px 18px;border:1px solid var(--line);background:transparent;
+  color:var(--text-dim);font-size:13px;font-weight:500;letter-spacing:.02em;
+  transition:all .25s ease;
+}
+.filter-btn:hover{color:var(--text);border-color:var(--text-dim)}
+.filter-btn.active{background:var(--gold);color:#12100E;border-color:var(--gold)}
+.portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
+.proj{
+  border:1px solid var(--line);background:var(--surface);overflow:hidden;
+  opacity:0;transform:translateY(24px);transition:all .55s ease;
+}
+.proj.in{opacity:1;transform:translateY(0)}
+.proj.hide{display:none}
+.proj-img{position:relative;overflow:hidden;aspect-ratio:3/2}
+.proj-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.proj:hover .proj-img img{transform:scale(1.06)}
+.proj-img::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 50%,rgba(18,16,14,.85));
+}
+.proj-badge{
+  position:absolute;top:14px;left:14px;z-index:2;
+  background:var(--gold);color:#12100E;padding:5px 10px;
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+}
+.proj-body{padding:22px}
+.proj-body h3{font-family:'Fraunces';font-size:22px;font-weight:700;letter-spacing:-.01em}
+.proj-body p{color:var(--text-dim);font-size:14px;margin-top:8px;min-height:42px}
+.proj-link{
+  display:inline-flex;align-items:center;gap:8px;margin-top:16px;
+  font-size:13px;font-weight:600;color:var(--gold);letter-spacing:.04em;
+  border-bottom:1px solid transparent;padding-bottom:2px;transition:border-color .25s ease;
+}
+.proj-link:hover{border-color:var(--gold)}
+.proj-link svg{width:14px;height:14px;transition:transform .25s ease}
+.proj-link:hover svg{transform:translateX(4px)}
+
+/* ===TESTIMONIALS=== */
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:50px}
+.test-card{
+  border:1px solid var(--line);background:var(--surface);padding:32px;
+  display:flex;flex-direction:column;gap:20px;
+  transition:border-color .3s ease, transform .3s ease;
+}
+.test-card:hover{border-color:var(--gold);transform:translateY(-4px)}
+.quote-mark{font-family:'Fraunces';font-size:64px;line-height:.4;color:var(--gold);font-weight:800;height:24px}
+.test-card blockquote{color:var(--text);font-size:15.5px;line-height:1.65;font-style:italic;flex:1}
+.test-meta{display:flex;align-items:center;gap:14px;border-top:1px solid var(--line);padding-top:18px}
+.test-meta img{width:48px;height:48px;border:1px solid var(--gold)}
+.test-meta .name{font-family:'Fraunces';font-weight:700;font-size:16px}
+.test-meta .role{font-size:12px;color:var(--text-mute);margin-top:2px}
+.stars{color:var(--gold);font-size:13px;letter-spacing:2px}
+
+/* ===CONTACT=== */
+.contact-wrap{
+  border:1px solid var(--line);background:var(--surface);
+  padding:clamp(36px,5vw,64px);
+  display:grid;grid-template-columns:1.1fr .9fr;gap:50px;align-items:center;
+  position:relative;overflow:hidden;
+}
+.contact-wrap::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(60% 80% at 100% 0%, rgba(234,179,8,.12), transparent 60%);
+  pointer-events:none;
+}
+.contact-wrap h2{
+  font-family:'Fraunces';font-weight:800;font-size:clamp(32px,4.5vw,52px);
+  line-height:1;letter-spacing:-.03em;
+}
+.contact-wrap h2 em{color:var(--gold);font-style:italic;font-weight:600}
+.contact-wrap > div{position:relative;z-index:1}
+.contact-info{display:flex;flex-direction:column;gap:14px}
+.info-row{
+  display:flex;align-items:center;gap:18px;
+  padding:18px;border:1px solid var(--line);background:rgba(18,16,14,.4);
+  transition:border-color .25s ease;
+}
+.info-row:hover{border-color:var(--gold)}
+.info-icon{
+  width:44px;height:44px;background:rgba(234,179,8,.1);
+  border:1px solid rgba(234,179,8,.3);color:var(--gold);
+  display:grid;place-items:center;flex-shrink:0;
+}
+.info-icon svg{width:20px;height:20px}
+.info-label{font-size:11px;color:var(--text-mute);text-transform:uppercase;letter-spacing:.14em}
+.info-val{font-size:15px;font-weight:500;margin-top:2px}
+.wa-cta{
+  margin-top:8px;background:var(--gold);color:#12100E;
+  padding:18px 24px;font-weight:700;font-size:15px;
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.wa-cta:hover{transform:translateY(-2px);box-shadow:var(--shadow-gold)}
+
+/* ===FOOTER=== */
+footer{
+  border-top:1px solid var(--line);
+  padding:60px 0 30px;margin-top:60px;
+}
+.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:50px}
+.foot-brand h3{font-family:'Fraunces';font-size:26px;font-weight:800;letter-spacing:-.02em}
+.foot-brand p{color:var(--text-dim);font-size:14px;margin-top:10px;max-width:36ch}
+.foot-col h5{font-family:'Manrope';font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--gold);margin-bottom:18px}
+.foot-col a{display:block;color:var(--text-dim);font-size:14px;padding:6px 0;transition:color .2s ease}
+.foot-col a:hover{color:var(--gold)}
+.socials{display:flex;gap:10px;margin-top:14px}
+.socials a{
+  width:40px;height:40px;border:1px solid var(--line);display:grid;place-items:center;
+  color:var(--text-dim);transition:all .25s ease;
+}
+.socials a:hover{border-color:var(--gold);color:var(--gold)}
+.socials svg{width:16px;height:16px}
+.foot-bottom{
+  margin-top:50px;padding-top:24px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;
+  font-size:13px;color:var(--text-mute);
+}
+
+/* ===ANIMATIONS=== */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease, transform .8s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal[data-delay="1"]{transition-delay:.1s}
+.reveal[data-delay="2"]{transition-delay:.2s}
+.reveal[data-delay="3"]{transition-delay:.3s}
+.reveal[data-delay="4"]{transition-delay:.4s}
+.reveal[data-delay="5"]{transition-delay:.5s}
+
+/* ===RESPONSIVE=== */
+@media (max-width:1024px){
+  .hero-grid{grid-template-columns:1fr;gap:80px}
+  .hero-visual{min-height:480px}
+  .about-grid{grid-template-columns:1fr;gap:80px}
+  .services-grid{grid-template-columns:1fr}
+  .services-head{grid-template-columns:1fr;gap:20px}
+  .process-grid{grid-template-columns:repeat(2,1fr);gap:40px 20px}
+  .process-grid::before{display:none}
+  .portfolio-grid{grid-template-columns:repeat(2,1fr)}
+  .test-grid{grid-template-columns:1fr;max-width:600px;margin-inline:auto;margin-top:50px}
+  .contact-wrap{grid-template-columns:1fr;gap:40px}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:40px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:0}
+  .stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--line)}
+}
+@media (max-width:768px){
+  .nav-menu{
+    position:fixed;top:74px;left:0;right:0;
+    flex-direction:column;align-items:stretch;gap:0;
+    background:rgba(18,16,14,.96);backdrop-filter:blur(16px);
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    padding:20px var(--pad);
+    transform:translateY(-120%);transition:transform .35s ease;
+  }
+  .nav-menu.open{transform:translateY(0)}
+  .nav-menu a{padding:14px 0;border-bottom:1px solid var(--line)}
+  .nav-menu a.active::after{display:none}
+  .nav-cta{margin:14px 0 0;text-align:center}
+  .burger{display:flex}
+  .adv-grid{grid-template-columns:1fr;gap:12px}
+  .portfolio-grid{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr;gap:40px}
+  .float-card.a{left:-4%}
+  .float-card.b{right:-4%}
+  .hero{padding:130px 0 60px}
+  .stats{grid-template-columns:1fr}
+  .stat{border-right:0;border-bottom:1px solid var(--line)}
+  .stat:last-child{border-bottom:0}
+  .foot-bottom{flex-direction:column;text-align:center}
+}
+@media (max-width:380px){
+  .phone{width:220px;height:440px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===NAVBAR=== -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#hero" class="logo">
+      <span class="logo-mark"><span>F</span></span>
+      Fajar<span style="color:var(--gold)">.</span>
+    </a>
+    <div class="nav-menu" id="navMenu">
+      <a href="#about" data-nav>Tentang</a>
+      <a href="#services" data-nav>Layanan</a>
+      <a href="#process" data-nav>Cara Kerja</a>
+      <a href="#portfolio" data-nav>Proyek</a>
+      <a href="#contact" data-nav>Kontak</a>
+      <a href="#contact" class="nav-cta">Diskusi Proyek →</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===HERO=== -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <span class="hero-tag reveal"><span class="dot"></span>Tersedia untuk proyek baru · Q1 2026</span>
+        <h1 class="reveal" data-delay="1">
+          Aplikasi mobile <span class="accent">yang dipakai,</span><br>
+          bukan sekadar <span class="accent">diunduh.</span>
+        </h1>
+        <p class="lead reveal" data-delay="2">
+          Saya Fajar Nugraha, Mobile App Developer dengan 4+ tahun pengalaman membangun aplikasi native Android, iOS, dan Flutter. 10+ aplikasi rilis ke Play Store & App Store dengan rating rata-rata 4.8 ⭐
+        </p>
+        <div class="cta-row reveal" data-delay="3">
+          <a href="#services" class="btn btn-primary">
+            Lihat Layanan
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#contact" class="btn btn-ghost">
+            Hubungi Saya
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal" data-delay="2">
+        <div class="float-card a">
+          <div class="pill">4.8</div>
+          <div>
+            <div class="label">Avg Rating</div>
+            <div class="val">10+ Apps Released</div>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="row h"></div>
+            <div class="row s"></div>
+            <div class="row"></div>
+            <div class="row"></div>
+            <div class="grid2">
+              <div></div><div></div>
+            </div>
+            <div class="row s"></div>
+            <div class="row"></div>
+          </div>
+        </div>
+        <div class="float-card b">
+          <div class="pill" style="background:#22c55e;color:#0a0907">↑</div>
+          <div>
+            <div class="label">Crash-free</div>
+            <div class="val">99.8%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Kotlin</span><span>Swift</span><span>Flutter</span><span>React Native</span><span>Jetpack Compose</span><span>SwiftUI</span><span>Firebase</span><span>MQTT</span><span>Clean Architecture</span>
+      <span>Kotlin</span><span>Swift</span><span>Flutter</span><span>React Native</span><span>Jetpack Compose</span><span>SwiftUI</span><span>Firebase</span><span>MQTT</span><span>Clean Architecture</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===ABOUT=== -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">01 — Tentang Saya</span>
+      <h2 class="section-title">Saya menulis kode, <em>klien tidur nyenyak.</em></h2>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-photo reveal">
+        <img src="https://placehold.co/400x400/1C1916/EAB308?text=Fajar+N." alt="Foto Fajar Nugraha" loading="lazy">
+        <div class="photo-badge">
+          4+ thn
+          <small>Pengalaman</small>
+        </div>
+      </div>
+
+      <div class="bio reveal" data-delay="1">
+        <p>Halo, saya Fajar — seorang Mobile App Developer asal Jakarta yang percaya bahwa aplikasi hebat bukan tentang fitur terbanyak, melainkan tentang seberapa cepat ia membuka, seberapa halus ia bergerak, dan seberapa sedikit ia membuat penggunanya berpikir.</p>
+        <p>Selama 4+ tahun terakhir, saya membangun aplikasi native Android dan iOS dengan Kotlin, Swift, serta Flutter untuk klien dari berbagai bidang — mulai dari e-commerce, IoT, hingga kesehatan. Lebih dari 10 aplikasi sudah saya rilis ke Play Store dan App Store dengan rating rata-rata 4.8.</p>
+        <p>Pendekatan saya sederhana: pahami kebutuhan, rancang arsitektur yang bersih, kerjakan dengan rapi, dan selalu siap merawatnya setelah peluncuran. Mari bicarakan ide aplikasi Anda.</p>
+
+        <div class="adv-grid">
+          <div class="adv-card reveal" data-delay="1">
+            <div class="adv-num">/ 01</div>
+            <h4>Multi-Platform</h4>
+            <p>Satu kode untuk Android dan iOS dengan Flutter.</p>
+          </div>
+          <div class="adv-card reveal" data-delay="2">
+            <div class="adv-num">/ 02</div>
+            <h4>Clean Architecture</h4>
+            <p>Kode terstruktur yang scalable dan mudah di-maintain.</p>
+          </div>
+          <div class="adv-card reveal" data-delay="3">
+            <div class="adv-num">/ 03</div>
+            <h4>UI/UX Detail</h4>
+            <p>Implementasi desain yang presisi hingga level pixel.</p>
+          </div>
+        </div>
+
+        <div class="stats reveal" data-delay="2">
+          <div class="stat"><div class="n">10+</div><div class="l">Apps Released</div></div>
+          <div class="stat"><div class="n">4.8</div><div class="l">Avg Rating</div></div>
+          <div class="stat"><div class="n">500K+</div><div class="l">Total Downloads</div></div>
+          <div class="stat"><div class="n">4+</div><div class="l">Tahun Pengalaman</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===SERVICES=== -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="services-head reveal">
+      <div>
+        <span class="eyebrow">02 — Layanan</span>
+        <h2 class="section-title">Solusi mobile <em>end-to-end,</em> dari ide ke store.</h2>
+      </div>
+      <p class="section-sub">Setiap proyek ditangani langsung oleh saya — tanpa perantara, tanpa kejutan. Dari MVP cepat sampai sistem mobile berskala.</p>
+    </div>
+
+    <div class="services-grid">
+      <div class="svc-card reveal" data-delay="1">
+        <div class="svc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg>
+        </div>
+        <h3>Aplikasi Mobile</h3>
+        <p>Aplikasi mobile kustom dari konsep hingga rilis — siap untuk pengguna sungguhan, bukan sekadar demo.</p>
+        <ul class="svc-list">
+          <li>Flutter / React Native</li>
+          <li>API Integration</li>
+          <li>Push Notification</li>
+          <li>Play Store &amp; App Store Submission</li>
+        </ul>
+      </div>
+
+      <div class="svc-card reveal" data-delay="2">
+        <div class="svc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <h3>Aplikasi IoT</h3>
+        <p>Aplikasi untuk perangkat Internet of Things — kontrol, monitoring, dan otomasi yang real-time dan andal.</p>
+        <ul class="svc-list">
+          <li>Bluetooth LE</li>
+          <li>MQTT Real-time</li>
+          <li>Real-time Monitoring</li>
+          <li>Sensor Integration</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="svc-cta reveal">
+      <div>
+        <h4>Butuh layanan di luar daftar di atas?</h4>
+        <p>Maintenance app eksisting, audit performa, atau migrasi ke Flutter — mari ngobrol dulu, gratis.</p>
+      </div>
+      <a href="#contact" class="btn btn-primary">Mulai Diskusi
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===PROCESS=== -->
+<section class="section" id="process">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">03 — Cara Kerja</span>
+      <h2 class="section-title">Proses yang transparan, <em>tanpa drama.</em></h2>
+    </div>
+
+    <div class="process-grid">
+      <div class="step" data-step>
+        <div class="step-num">01</div>
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        <h4>Discovery &amp; Scope</h4>
+        <p>Diskusi gratis tentang ide, fitur inti, target user, dan ekosistem perangkat yang dituju.</p>
+      </div>
+      <div class="step" data-step>
+        <div class="step-num">02</div>
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+        <h4>Proposal &amp; Roadmap</h4>
+        <p>Penawaran harga transparan dengan milestone yang jelas, dikirim dalam 1×24 jam.</p>
+      </div>
+      <div class="step" data-step>
+        <div class="step-num">03</div>
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+        <h4>Build &amp; Iterate</h4>
+        <p>Sprint mingguan dengan build TestFlight / Internal Track agar Anda bisa pantau progres setiap saat.</p>
+      </div>
+      <div class="step" data-step>
+        <div class="step-num">04</div>
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+        <h4>Launch &amp; Support</h4>
+        <p>Submission ke Play Store &amp; App Store, plus garansi bugfix 30 hari pasca rilis.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===PORTFOLIO=== -->
+<section class="section" id="portfolio">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">04 — Proyek Terpilih</span>
+      <h2 class="section-title">Beberapa hasil <em>yang membuat saya bangga.</em></h2>
+      <div class="filter-row" id="filterRow">
+        <button class="filter-btn active" data-filter="all">Semua</button>
+        <button class="filter-btn" data-filter="Mobile App">Mobile App</button>
+        <button class="filter-btn" data-filter="IoT">IoT</button>
+      </div>
+    </div>
+
+    <div class="portfolio-grid" id="portfolioGrid">
+      <article class="proj" data-cat="Mobile App">
+        <div class="proj-img">
+          <span class="proj-badge">Mobile App</span>
+          <img src="https://placehold.co/600x400/1C1916/EAB308?text=E-Commerce+App" alt="Aplikasi E-Commerce" loading="lazy">
+        </div>
+        <div class="proj-body">
+          <h3>Aplikasi E-Commerce</h3>
+          <p>Aplikasi belanja dengan 100K+ download dan rating 4.7 di Play Store.</p>
+          <a href="#contact" class="proj-link">Lihat Detail
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <article class="proj" data-cat="IoT">
+        <div class="proj-img">
+          <span class="proj-badge">IoT</span>
+          <img src="https://placehold.co/600x400/12100E/EAB308?text=IoT+Smart+Home" alt="IoT Smart Home" loading="lazy">
+        </div>
+        <div class="proj-body">
+          <h3>IoT Smart Home</h3>
+          <p>Aplikasi kontrol perangkat smart home dengan koneksi real-time via MQTT.</p>
+          <a href="#contact" class="proj-link">Lihat Detail
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <article class="proj" data-cat="Mobile App">
+        <div class="proj-img">
+          <span class="proj-badge">Mobile App</span>
+          <img src="https://placehold.co/600x400/221F1B/EAB308?text=Fitness+Tracker" alt="Fitness Tracker" loading="lazy">
+        </div>
+        <div class="proj-body">
+          <h3>Fitness Tracker</h3>
+          <p>Aplikasi fitness dengan integrasi health API dan gamifikasi yang adiktif.</p>
+          <a href="#contact" class="proj-link">Lihat Detail
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===TESTIMONIALS=== -->
+<section class="section" id="testimonials">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">05 — Testimoni</span>
+      <h2 class="section-title">Yang dikatakan <em>klien-klien saya.</em></h2>
+    </div>
+
+    <div class="test-grid">
+      <div class="test-card reveal" data-delay="1">
+        <div class="quote-mark">"</div>
+        <blockquote>Fajar bukan cuma coder — dia ikut mikirin user experience. Aplikasi e-commerce kami naik konversi 32% setelah dia handle full revamp. Komunikasi cepat, tepat waktu.</blockquote>
+        <div class="stars">★★★★★</div>
+        <div class="test-meta">
+          <img src="https://placehold.co/60x60/EAB308/12100E?text=AR" alt="Ardi Wijaya" loading="lazy">
+          <div>
+            <div class="name">Ardi Wijaya</div>
+            <div class="role">CTO, ShopLocal Indonesia</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-card reveal" data-delay="2">
+        <div class="quote-mark">"</div>
+        <blockquote>Kami sudah ganti 3 developer sebelum ketemu Fajar. Akhirnya aplikasi IoT kami stabil di lapangan — koneksi BLE-nya beneran reliable. Worth every rupiah.</blockquote>
+        <div class="stars">★★★★★</div>
+        <div class="test-meta">
+          <img src="https://placehold.co/60x60/1C1916/EAB308?text=SP" alt="Sinta Permata" loading="lazy">
+          <div>
+            <div class="name">Sinta Permata</div>
+            <div class="role">Founder, SmartLiving.id</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-card reveal" data-delay="3">
+        <div class="quote-mark">"</div>
+        <blockquote>Detail UI-nya gila. Klien kami yang super picky pun nggak nemu satupun yang perlu direvisi di build pertama. Rekomendasi keras buat tim startup serius.</blockquote>
+        <div class="stars">★★★★★</div>
+        <div class="test-meta">
+          <img src="https://placehold.co/60x60/221F1B/EAB308?text=DH" alt="Dimas Hartono" loading="lazy">
+          <div>
+            <div class="name">Dimas Hartono</div>
+            <div class="role">Product Lead, FitNow App</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===CONTACT=== -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="contact-wrap reveal">
+      <div>
+        <span class="eyebrow">06 — Kontak</span>
+        <h2 style="margin-top:18px">Punya ide aplikasi? <em>Mari wujudkan.</em></h2>
+        <p style="margin-top:18px;color:var(--text-dim);font-size:16px;max-width:46ch">
+          Saya membalas setiap pesan dalam 1×24 jam pada hari kerja. Pilih cara paling nyaman buat Anda di kanan — kopi pertama saya yang traktir.
+        </p>
+
+        <a href="https://wa.me/6287887654321" target="_blank" rel="noopener" class="wa-cta" style="margin-top:30px">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zM6.597 20.13c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.299-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+          Chat via WhatsApp
+        </a>
+      </div>
+
+      <div class="contact-info">
+        <a href="mailto:fajar.nugraha@email.com" class="info-row">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
+          </div>
+          <div>
+            <div class="info-label">Email</div>
+            <div class="info-val">fajar.nugraha@email.com</div>
+          </div>
+        </a>
+        <a href="https://wa.me/6287887654321" target="_blank" rel="noopener" class="info-row">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div>
+            <div class="info-label">WhatsApp</div>
+            <div class="info-val">+62 878-8765-4321</div>
+          </div>
+        </a>
+        <div class="info-row">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <div class="info-label">Lokasi</div>
+            <div class="info-val">Jakarta, WIB</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <div>
+            <div class="info-label">Jam Kerja</div>
+            <div class="info-val">Senin – Jumat, 09.00 – 18.00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===FOOTER=== -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <h3>Fajar Nugraha<span style="color:var(--gold)">.</span></h3>
+        <p>Mobile App Developer · Membangun aplikasi mobile yang cepat, indah, dan andal.</p>
+        <div class="socials">
+          <a href="https://instagram.com/fajarnugraha.dev" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01"/></svg>
+          </a>
+          <a href="https://linkedin.com/in/fajarnugraha" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 6a2 2 0 100-4 2 2 0 000 4z"/></svg>
+          </a>
+          <a href="https://github.com/fajarnugraha" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="foot-col">
+        <h5>Navigasi</h5>
+        <a href="#about">Tentang</a>
+        <a href="#services">Layanan</a>
+        <a href="#process">Cara Kerja</a>
+        <a href="#portfolio">Proyek</a>
+        <a href="#contact">Kontak</a>
+      </div>
+
+      <div class="foot-col">
+        <h5>Kontak</h5>
+        <a href="mailto:fajar.nugraha@email.com">fajar.nugraha@email.com</a>
+        <a href="https://wa.me/6287887654321" target="_blank" rel="noopener">+62 878-8765-4321</a>
+        <a href="#">Download CV</a>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <div>© 2026 Fajar Nugraha. All rights reserved.</div>
+      <div>Crafted with care in Jakarta, WIB.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ===NAVBAR: scroll + active state + mobile toggle=== */
+const nav = document.getElementById('nav');
+const navMenu = document.getElementById('navMenu');
+const burger = document.getElementById('burger');
+const links = document.querySelectorAll('[data-nav]');
+
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+
+burger.addEventListener('click', () => {
+  burger.classList.toggle('open');
+  navMenu.classList.toggle('open');
+});
+
+document.querySelectorAll('.nav-menu a').forEach(a => {
+  a.addEventListener('click', () => {
+    burger.classList.remove('open');
+    navMenu.classList.remove('open');
+  });
+});
+
+/* IntersectionObserver: active nav state */
+const sections = ['about', 'services', 'process', 'portfolio', 'contact']
+  .map(id => document.getElementById(id))
+  .filter(Boolean);
+
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      links.forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === `#${id}`);
+      });
+    }
+  });
+}, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+
+sections.forEach(s => navObserver.observe(s));
+
+/* ===REVEAL ON SCROLL=== */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      revealObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ===PROCESS STEPS: staggered reveal=== */
+const stepObserver = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      const steps = document.querySelectorAll('[data-step]');
+      steps.forEach((s, idx) => {
+        setTimeout(() => s.classList.add('in'), idx * 150);
+      });
+      stepObserver.disconnect();
+    }
+  });
+}, { threshold: 0.2 });
+
+const firstStep = document.querySelector('[data-step]');
+if (firstStep) stepObserver.observe(firstStep);
+
+/* ===PORTFOLIO: card reveal + filter=== */
+const projects = document.querySelectorAll('.proj');
+const projObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const cards = document.querySelectorAll('.proj:not(.hide)');
+      cards.forEach((c, i) => setTimeout(() => c.classList.add('in'), i * 120));
+      projObserver.disconnect();
+    }
+  });
+}, { threshold: 0.15 });
+
+if (projects[0]) projObserver.observe(projects[0]);
+
+document.getElementById('filterRow').addEventListener('click', (e) => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const f = btn.dataset.filter;
+  projects.forEach(p => {
+    const show = f === 'all' || p.dataset.cat === f;
+    p.classList.toggle('hide', !show);
+    if (show) {
+      p.classList.remove('in');
+      requestAnimationFrame(() => p.classList.add('in'));
+    }
+  });
+});
+
+/* ===SMOOTH SCROLL FALLBACK=== */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    const id = a.getAttribute('href');
+    if (id.length > 1) {
+      const t = document.querySelector(id);
+      if (t) {
+        e.preventDefault();
+        t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Budi Santoso — Web Developer</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0b1118;
+      --bg-secondary:#111926;
+      --card:#121c2b;
+      --text:#f3f7fb;
+      --muted:#9cb0c3;
+      --line:rgba(255,255,255,.08);
+      --accent:#19c37d;
+      --accent-soft:rgba(25,195,125,.12);
+      --shadow:0 20px 50px rgba(0,0,0,.35);
+      --radius:24px;
+      --container:1200px;
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      font-family:'Inter',sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(25,195,125,.08), transparent 25%),
+        radial-gradient(circle at bottom right, rgba(61,146,255,.08), transparent 20%),
+        var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+      background-size:40px 40px;
+      pointer-events:none;
+      z-index:-1;
+    }
+
+    ::selection{
+      background:var(--accent);
+      color:#07110d;
+    }
+
+    ::-webkit-scrollbar{
+      width:10px;
+    }
+
+    ::-webkit-scrollbar-track{
+      background:#091018;
+    }
+
+    ::-webkit-scrollbar-thumb{
+      background:linear-gradient(var(--accent), #0ea76a);
+      border-radius:999px;
+    }
+
+    a{
+      text-decoration:none;
+      color:inherit;
+    }
+
+    img{
+      display:block;
+      max-width:100%;
+    }
+
+    .container{
+      width:min(92%, var(--container));
+      margin:auto;
+    }
+
+    section{
+      padding:110px 0;
+      position:relative;
+    }
+
+    .section-tag{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      color:var(--muted);
+      margin-bottom:20px;
+      font-size:.92rem;
+      backdrop-filter:blur(10px);
+    }
+
+    .section-title{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(2rem,4vw,4rem);
+      line-height:1.1;
+      margin-bottom:18px;
+      max-width:700px;
+    }
+
+    .section-desc{
+      color:var(--muted);
+      line-height:1.8;
+      max-width:700px;
+    }
+
+    .grid{
+      display:grid;
+      gap:24px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:15px 22px;
+      border-radius:16px;
+      border:none;
+      cursor:pointer;
+      font-weight:600;
+      transition:.3s ease;
+    }
+
+    .btn-primary{
+      background:var(--accent);
+      color:#08110d;
+      box-shadow:0 10px 25px rgba(25,195,125,.28);
+    }
+
+    .btn-primary:hover{
+      transform:translateY(-3px);
+    }
+
+    .btn-secondary{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      backdrop-filter:blur(10px);
+    }
+
+    .btn-secondary:hover{
+      border-color:rgba(255,255,255,.2);
+      transform:translateY(-3px);
+    }
+
+    .card{
+      background:rgba(18,28,43,.78);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      backdrop-filter:blur(14px);
+      box-shadow:var(--shadow);
+    }
+
+    .fade-up{
+      opacity:0;
+      transform:translateY(40px);
+      transition:all .8s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .fade-up.show{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    /* === NAVBAR === */
+
+    .navbar{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      z-index:999;
+      transition:.35s ease;
+    }
+
+    .navbar.scrolled{
+      background:rgba(10,16,24,.75);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,.05);
+    }
+
+    .nav-inner{
+      width:min(92%, var(--container));
+      margin:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:20px 0;
+    }
+
+    .logo{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:1.3rem;
+      font-weight:700;
+      letter-spacing:.5px;
+    }
+
+    .logo span{
+      color:var(--accent);
+    }
+
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .nav-links a{
+      padding:12px 16px;
+      border-radius:14px;
+      color:var(--muted);
+      transition:.3s;
+      font-size:.95rem;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active{
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+    }
+
+    .hamburger{
+      display:none;
+      width:48px;
+      height:48px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      position:relative;
+      cursor:pointer;
+    }
+
+    .hamburger span{
+      position:absolute;
+      width:22px;
+      height:2px;
+      background:#fff;
+      left:50%;
+      transform:translateX(-50%);
+      transition:.3s ease;
+    }
+
+    .hamburger span:nth-child(1){ top:16px; }
+    .hamburger span:nth-child(2){ top:23px; }
+    .hamburger span:nth-child(3){ top:30px; }
+
+    .hamburger.active span:nth-child(1){
+      transform:translateX(-50%) rotate(45deg);
+      top:23px;
+    }
+
+    .hamburger.active span:nth-child(2){
+      opacity:0;
+    }
+
+    .hamburger.active span:nth-child(3){
+      transform:translateX(-50%) rotate(-45deg);
+      top:23px;
+    }
+
+    /* === HERO === */
+
+    .hero{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      padding-top:120px;
+      overflow:hidden;
+    }
+
+    .hero-wrap{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      align-items:center;
+      gap:60px;
+    }
+
+    .hero-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 18px;
+      border-radius:999px;
+      background:rgba(25,195,125,.08);
+      border:1px solid rgba(25,195,125,.2);
+      color:#d4ffe9;
+      margin-bottom:28px;
+    }
+
+    .hero h1{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(3rem,7vw,6rem);
+      line-height:1;
+      margin-bottom:26px;
+      letter-spacing:-2px;
+    }
+
+    .hero h1 .outline{
+      color:transparent;
+      -webkit-text-stroke:1px rgba(255,255,255,.25);
+    }
+
+    .hero p{
+      color:var(--muted);
+      line-height:1.9;
+      font-size:1.05rem;
+      max-width:650px;
+      margin-bottom:38px;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:16px;
+    }
+
+    .hero-card{
+      padding:30px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero-card::before{
+      content:"";
+      position:absolute;
+      width:180px;
+      height:180px;
+      background:rgba(25,195,125,.15);
+      border-radius:50%;
+      filter:blur(50px);
+      top:-40px;
+      right:-40px;
+    }
+
+    .terminal{
+      background:#081018;
+      border-radius:20px;
+      padding:20px;
+      border:1px solid rgba(255,255,255,.06);
+    }
+
+    .terminal-top{
+      display:flex;
+      gap:8px;
+      margin-bottom:18px;
+    }
+
+    .terminal-top span{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+    }
+
+    .terminal-top span:nth-child(1){ background:#ff5f56; }
+    .terminal-top span:nth-child(2){ background:#ffbd2e; }
+    .terminal-top span:nth-child(3){ background:#27c93f; }
+
+    .code-line{
+      font-family:monospace;
+      color:#7cefb7;
+      margin-bottom:12px;
+      font-size:.95rem;
+      word-break:break-word;
+    }
+
+    .stats-mini{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+      margin-top:20px;
+    }
+
+    .mini-box{
+      padding:18px;
+      border-radius:18px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.06);
+    }
+
+    .mini-box h3{
+      font-size:1.8rem;
+      margin-bottom:6px;
+      font-family:'Space Grotesk',sans-serif;
+    }
+
+    .mini-box p{
+      margin:0;
+      font-size:.9rem;
+    }
+
+    /* === ABOUT === */
+
+    .about-wrap{
+      display:grid;
+      grid-template-columns:.9fr 1.1fr;
+      gap:50px;
+      align-items:center;
+      margin-top:60px;
+    }
+
+    .about-image{
+      position:relative;
+    }
+
+    .about-image img{
+      border-radius:32px;
+      border:1px solid var(--line);
+    }
+
+    .about-image::after{
+      content:"";
+      position:absolute;
+      inset:20px -20px -20px 20px;
+      border:1px dashed rgba(255,255,255,.12);
+      border-radius:32px;
+      z-index:-1;
+    }
+
+    .about-text p{
+      color:var(--muted);
+      line-height:1.9;
+      margin-bottom:20px;
+    }
+
+    .about-cards{
+      margin-top:36px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+
+    .feature-card{
+      padding:24px;
+      transition:.3s ease;
+    }
+
+    .feature-card:hover{
+      transform:translateY(-6px);
+      border-color:rgba(25,195,125,.4);
+    }
+
+    .feature-card h4{
+      margin:16px 0 10px;
+      font-size:1.05rem;
+    }
+
+    .feature-card p{
+      margin:0;
+      font-size:.95rem;
+      line-height:1.7;
+    }
+
+    .stats-grid{
+      margin-top:32px;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
+    }
+
+    .stat{
+      padding:24px;
+      text-align:center;
+    }
+
+    .stat h3{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:2rem;
+      margin-bottom:8px;
+    }
+
+    .stat p{
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    /* === SERVICES === */
+
+    .services-grid{
+      margin-top:60px;
+      grid-template-columns:repeat(2,1fr);
+    }
+
+    .service-card{
+      padding:36px;
+      position:relative;
+      overflow:hidden;
+      transition:.35s ease;
+    }
+
+    .service-card:hover{
+      transform:translateY(-10px);
+      border-color:rgba(25,195,125,.35);
+      box-shadow:0 20px 50px rgba(25,195,125,.08);
+    }
+
+    .service-card::after{
+      content:"";
+      position:absolute;
+      inset:auto -60px -60px auto;
+      width:140px;
+      height:140px;
+      background:rgba(25,195,125,.08);
+      border-radius:50%;
+      filter:blur(25px);
+    }
+
+    .service-icon{
+      width:64px;
+      height:64px;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      background:var(--accent-soft);
+      border:1px solid rgba(25,195,125,.18);
+      margin-bottom:24px;
+    }
+
+    .service-card h3{
+      margin-bottom:14px;
+      font-size:1.4rem;
+    }
+
+    .service-card p{
+      color:var(--muted);
+      line-height:1.8;
+      margin-bottom:24px;
+    }
+
+    .service-card ul{
+      list-style:none;
+      display:grid;
+      gap:14px;
+    }
+
+    .service-card li{
+      color:#d7e2ec;
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+
+    .service-card li::before{
+      content:"";
+      width:8px;
+      height:8px;
+      background:var(--accent);
+      border-radius:50%;
+      flex-shrink:0;
+    }
+
+    /* === PROCESS === */
+
+    .timeline{
+      margin-top:70px;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:22px;
+      position:relative;
+    }
+
+    .timeline::before{
+      content:"";
+      position:absolute;
+      top:42px;
+      left:5%;
+      width:90%;
+      height:1px;
+      background:rgba(255,255,255,.08);
+    }
+
+    .timeline-item{
+      position:relative;
+      z-index:2;
+      padding:32px 26px;
+    }
+
+    .timeline-number{
+      width:52px;
+      height:52px;
+      border-radius:16px;
+      background:var(--accent);
+      color:#06100c;
+      display:grid;
+      place-items:center;
+      font-weight:700;
+      margin-bottom:24px;
+      font-family:'Space Grotesk',sans-serif;
+    }
+
+    .timeline-item h3{
+      margin-bottom:12px;
+    }
+
+    .timeline-item p{
+      color:var(--muted);
+      line-height:1.8;
+    }
+
+    /* === PORTFOLIO === */
+
+    .filter-tabs{
+      margin-top:40px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .filter-btn{
+      padding:12px 18px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      cursor:pointer;
+      transition:.3s;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover{
+      background:var(--accent);
+      color:#08110d;
+      border-color:transparent;
+    }
+
+    .portfolio-grid{
+      margin-top:40px;
+      grid-template-columns:repeat(3,1fr);
+    }
+
+    .portfolio-card{
+      overflow:hidden;
+      transition:.35s ease;
+    }
+
+    .portfolio-card:hover{
+      transform:translateY(-8px);
+    }
+
+    .portfolio-image{
+      position:relative;
+      overflow:hidden;
+    }
+
+    .portfolio-image img{
+      transition:.5s ease;
+    }
+
+    .portfolio-card:hover img{
+      transform:scale(1.06);
+    }
+
+    .portfolio-content{
+      padding:28px;
+    }
+
+    .badge{
+      display:inline-flex;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(25,195,125,.12);
+      color:#b9ffd8;
+      margin-bottom:16px;
+      font-size:.85rem;
+    }
+
+    .portfolio-content h3{
+      margin-bottom:12px;
+    }
+
+    .portfolio-content p{
+      color:var(--muted);
+      line-height:1.8;
+      margin-bottom:22px;
+    }
+
+    /* === TESTIMONIAL === */
+
+    .testimonial-grid{
+      margin-top:60px;
+      grid-template-columns:repeat(3,1fr);
+    }
+
+    .testimonial-card{
+      padding:32px;
+      position:relative;
+    }
+
+    .stars{
+      color:#ffcf4a;
+      margin-bottom:18px;
+      letter-spacing:2px;
+    }
+
+    .testimonial-card p{
+      color:var(--muted);
+      line-height:1.9;
+      margin-bottom:24px;
+    }
+
+    .testimonial-user{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+
+    .testimonial-user img{
+      width:60px;
+      height:60px;
+      border-radius:50%;
+      border:2px solid rgba(255,255,255,.08);
+    }
+
+    .testimonial-user span{
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    /* === CONTACT === */
+
+    .contact-box{
+      margin-top:60px;
+      padding:40px;
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:30px;
+      align-items:center;
+    }
+
+    .contact-list{
+      display:grid;
+      gap:18px;
+    }
+
+    .contact-item{
+      padding:22px;
+      border-radius:20px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.05);
+    }
+
+    .contact-item span{
+      display:block;
+      color:var(--muted);
+      margin-bottom:8px;
+      font-size:.92rem;
+    }
+
+    .contact-item h4{
+      font-size:1.05rem;
+      word-break:break-word;
+    }
+
+    /* === FOOTER === */
+
+    footer{
+      padding:40px 0;
+      border-top:1px solid rgba(255,255,255,.06);
+      background:rgba(255,255,255,.02);
+    }
+
+    .footer-wrap{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    .footer-brand h3{
+      font-family:'Space Grotesk',sans-serif;
+      margin-bottom:10px;
+    }
+
+    .footer-brand p{
+      color:var(--muted);
+    }
+
+    .footer-links,
+    .footer-social{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+    }
+
+    .footer-links a,
+    .footer-social a{
+      color:var(--muted);
+      transition:.3s;
+    }
+
+    .footer-links a:hover,
+    .footer-social a:hover{
+      color:var(--text);
+    }
+
+    /* === RESPONSIVE === */
+
+    @media(max-width:1024px){
+
+      .hero-wrap,
+      .about-wrap,
+      .contact-box{
+        grid-template-columns:1fr;
+      }
+
+      .timeline{
+        grid-template-columns:repeat(2,1fr);
+      }
+
+      .timeline::before{
+        display:none;
+      }
+
+      .portfolio-grid,
+      .testimonial-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+
+      .about-cards,
+      .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
+    @media(max-width:768px){
+
+      section{
+        padding:90px 0;
+      }
+
+      .nav-links{
+        position:absolute;
+        top:88px;
+        left:4%;
+        width:92%;
+        flex-direction:column;
+        background:rgba(10,16,24,.95);
+        backdrop-filter:blur(16px);
+        border:1px solid rgba(255,255,255,.06);
+        padding:18px;
+        border-radius:24px;
+        opacity:0;
+        visibility:hidden;
+        transform:translateY(-10px);
+        transition:.3s ease;
+      }
+
+      .nav-links.active{
+        opacity:1;
+        visibility:visible;
+        transform:translateY(0);
+      }
+
+      .nav-links a{
+        width:100%;
+      }
+
+      .hamburger{
+        display:block;
+      }
+
+      .services-grid,
+      .timeline,
+      .portfolio-grid,
+      .testimonial-grid,
+      .about-cards,
+      .stats-grid,
+      .contact-box{
+        grid-template-columns:1fr;
+      }
+
+      .hero h1{
+        letter-spacing:-1px;
+      }
+
+      .hero-actions{
+        flex-direction:column;
+        align-items:stretch;
+      }
+
+      .btn{
+        width:100%;
+      }
+
+      .footer-wrap{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- === NAVBAR === -->
+  <header class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="logo">Budi<span>.</span></a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#about">Tentang</a>
+        <a href="#services">Layanan</a>
+        <a href="#process">Cara Kerja</a>
+        <a href="#portfolio">Proyek</a>
+        <a href="#contact">Kontak</a>
+      </nav>
+
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- === HERO === -->
+  <section class="hero">
+    <div class="container hero-wrap">
+
+      <div>
+        <div class="hero-badge fade-up">
+          ⚡ Web Developer • Jakarta, WIB
+        </div>
+
+        <h1 class="fade-up">
+          Membangun Web yang
+          <span class="outline">Cepat</span>,
+          Aman, dan
+          <span style="color:var(--accent)">Scalable</span>
+        </h1>
+
+        <p class="fade-up">
+          Full-stack Web Developer dengan 5+ tahun pengalaman dalam mengembangkan aplikasi web modern. Menguasai React, Node.js, dan berbagai teknologi cloud dengan fokus utama pada performa, stabilitas, dan pengalaman pengguna yang benar-benar terasa cepat.
+        </p>
+
+        <div class="hero-actions fade-up">
+          <a href="#services" class="btn btn-primary">Lihat Layanan</a>
+          <a href="#contact" class="btn btn-secondary">Hubungi Saya</a>
+        </div>
+      </div>
+
+      <div class="hero-card card fade-up">
+        <div class="terminal">
+          <div class="terminal-top">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <div class="code-line">$ npm run build</div>
+          <div class="code-line">✔ Optimized production build</div>
+          <div class="code-line">✔ Lighthouse score: 98/100</div>
+          <div class="code-line">✔ Deployment successful</div>
+          <div class="code-line">✔ Happy client unlocked 😎</div>
+        </div>
+
+        <div class="stats-mini">
+          <div class="mini-box">
+            <h3>50+</h3>
+            <p>Project selesai</p>
+          </div>
+
+          <div class="mini-box">
+            <h3>5+</h3>
+            <p>Tahun pengalaman</p>
+          </div>
+
+          <div class="mini-box">
+            <h3>95+</h3>
+            <p>Skor Lighthouse</p>
+          </div>
+
+          <div class="mini-box">
+            <h3>99%</h3>
+            <p>Client satisfaction</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- === ABOUT === -->
+  <section id="about">
+    <div class="container">
+
+      <div class="section-tag fade-up">
+        Tentang Saya
+      </div>
+
+      <h2 class="section-title fade-up">
+        Developer yang lebih suka optimasi daripada drama dependency.
+      </h2>
+
+      <p class="section-desc fade-up">
+        Saya percaya website yang baik bukan cuma terlihat keren, tapi juga cepat, stabil, dan nyaman digunakan dalam jangka panjang.
+      </p>
+
+      <div class="about-wrap">
+
+        <div class="about-image fade-up">
+          <img
+            src="https://placehold.co/400x400"
+            alt="Budi Santoso"
+            loading="lazy"
+          >
+        </div>
+
+        <div class="about-text fade-up">
+          <p>
+            Halo, saya Budi Santoso — seorang Full-stack Web Developer yang sudah membantu berbagai bisnis dan startup membangun produk digital modern selama lebih dari 5 tahun. Saya terbiasa mengerjakan mulai dari landing page cepat hingga aplikasi web kompleks dengan ribuan data dan banyak pengguna aktif.
+          </p>
+
+          <p>
+            Fokus utama saya ada pada clean architecture, performa aplikasi, dan pengalaman pengguna yang terasa ringan di semua device. Saya juga senang menyederhanakan sistem yang rumit menjadi solusi yang lebih efisien dan mudah dikembangkan.
+          </p>
+
+          <p>
+            Di luar coding, saya cukup sering “berdebat” dengan Lighthouse score. Dan ya, kalau skornya turun 2 poin, saya bisa lebih panik daripada server production.
+          </p>
+
+          <div class="about-cards">
+
+            <div class="feature-card card">
+              <svg width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.7">
+                <path d="M8 17l6 6L26 11"/>
+              </svg>
+              <h4>Clean Code</h4>
+              <p>Kode rapi, terstruktur, dan mudah dipelihara untuk jangka panjang.</p>
+            </div>
+
+            <div class="feature-card card">
+              <svg width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.7">
+                <path d="M6 22L14 14L18 18L28 8"/>
+              </svg>
+              <h4>Performa Optimal</h4>
+              <p>Website cepat dengan optimasi performa dan Lighthouse 95+.</p>
+            </div>
+
+            <div class="feature-card card">
+              <svg width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.7">
+                <rect x="5" y="7" width="24" height="18" rx="3"/>
+                <path d="M11 29h12"/>
+              </svg>
+              <h4>Responsive Design</h4>
+              <p>Tampilan konsisten dan nyaman di desktop hingga mobile.</p>
+            </div>
+
+          </div>
+
+          <div class="stats-grid">
+
+            <div class="stat card">
+              <h3>50+</h3>
+              <p>Project</p>
+            </div>
+
+            <div class="stat card">
+              <h3>30+</h3>
+              <p>Client</p>
+            </div>
+
+            <div class="stat card">
+              <h3>5+</h3>
+              <p>Tahun</p>
+            </div>
+
+            <div class="stat card">
+              <h3>24/7</h3>
+              <p>Monitoring*</p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- === SERVICES === -->
+  <section id="services">
+    <div class="container">
+
+      <div class="section-tag fade-up">
+        Layanan
+      </div>
+
+      <h2 class="section-title fade-up">
+        Solusi web modern untuk bisnis yang ingin naik level.
+      </h2>
+
+      <div class="services-grid grid">
+
+        <div class="service-card card fade-up">
+
+          <div class="service-icon">
+            <svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="4" y="6" width="22" height="16" rx="2"/>
+              <path d="M10 26h10"/>
+            </svg>
+          </div>
+
+          <h3>Website Company Profile</h3>
+
+          <p>
+            Website profesional untuk meningkatkan kredibilitas bisnis dan memudahkan calon klien mengenal brand Anda secara online.
+          </p>
+
+          <ul>
+            <li>Responsive Design</li>
+            <li>SEO Optimized</li>
+            <li>CMS Integration</li>
+            <li>Hosting Setup</li>
+          </ul>
+
+        </div>
+
+        <div class="service-card card fade-up">
+
+          <div class="service-icon">
+            <svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M7 8l-4 4 4 4"/>
+              <path d="M23 8l4 4-4 4"/>
+              <path d="M17 4l-4 16"/>
+            </svg>
+          </div>
+
+          <h3>Web Application</h3>
+
+          <p>
+            Aplikasi web custom dengan sistem yang scalable, cepat, dan dirancang sesuai kebutuhan operasional bisnis Anda.
+          </p>
+
+          <ul>
+            <li>React / Next.js</li>
+            <li>Node.js Backend</li>
+            <li>Database Design</li>
+            <li>Deployment & Cloud</li>
+          </ul>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- === PROCESS === -->
+  <section id="process">
+    <div class="container">
+
+      <div class="section-tag fade-up">
+        Cara Kerja
+      </div>
+
+      <h2 class="section-title fade-up">
+        Proses kerja transparan, tanpa hilang setelah DP.
+      </h2>
+
+      <div class="timeline">
+
+        <div class="timeline-item card fade-up">
+          <div class="timeline-number">01</div>
+          <h3>Konsultasi Awal</h3>
+          <p>Diskusi kebutuhan, target bisnis, dan solusi web yang paling cocok.</p>
+        </div>
+
+        <div class="timeline-item card fade-up">
+          <div class="timeline-number">02</div>
+          <h3>Proposal & Timeline</h3>
+          <p>Estimasi harga, fitur, dan timeline pengerjaan dikirim secara transparan.</p>
+        </div>
+
+        <div class="timeline-item card fade-up">
+          <div class="timeline-number">03</div>
+          <h3>Development</h3>
+          <p>Proses pengerjaan dengan update berkala agar progres mudah dipantau.</p>
+        </div>
+
+        <div class="timeline-item card fade-up">
+          <div class="timeline-number">04</div>
+          <h3>Launch & Support</h3>
+          <p>Website dirilis lengkap dengan testing, deployment, dan support revisi.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- === PORTFOLIO === -->
+  <section id="portfolio">
+    <div class="container">
+
+      <div class="section-tag fade-up">
+        Portfolio
+      </div>
+
+      <h2 class="section-title fade-up">
+        Beberapa project yang berhasil saya bangun.
+      </h2>
+
+      <div class="filter-tabs fade-up">
+        <button class="filter-btn active" data-filter="all">Semua</button>
+        <button class="filter-btn" data-filter="Web App">Web App</button>
+        <button class="filter-btn" data-filter="Website">Website</button>
+      </div>
+
+      <div class="portfolio-grid grid">
+
+        <div class="portfolio-card card fade-up" data-category="Web App">
+          <div class="portfolio-image">
+            <img src="https://placehold.co/600x400" alt="Sistem Inventaris" loading="lazy">
+          </div>
+
+          <div class="portfolio-content">
+            <span class="badge">Web App</span>
+            <h3>Sistem Inventaris</h3>
+            <p>Aplikasi manajemen inventaris real-time dengan 500+ pengguna aktif.</p>
+            <a href="#" class="btn btn-secondary">Lihat Detail</a>
+          </div>
+        </div>
+
+        <div class="portfolio-card card fade-up" data-category="Website">
+          <div class="portfolio-image">
+            <img src="https://placehold.co/600x400" alt="Company Profile" loading="lazy">
+          </div>
+
+          <div class="portfolio-content">
+            <span class="badge">Website</span>
+            <h3>Company Profile</h3>
+            <p>Website perusahaan properti dengan performa tinggi dan SEO optimal.</p>
+            <a href="#" class="btn btn-secondary">Lihat Detail</a>
+          </div>
+        </div>
+
+        <div class="portfolio-card card fade-up" data-category="Web App">
+          <div class="portfolio-image">
+            <img src="https://placehold.co/600x400" alt="E-Learning Platform" loading="lazy">
+          </div>
+
+          <div class="portfolio-content">
+            <span class="badge">Web App</span>
+            <h3>E-Learning Platform</h3>
+            <p>Platform kursus online modern dengan fitur live streaming interaktif.</p>
+            <a href="#" class="btn btn-secondary">Lihat Detail</a>
+          </div>
+        </div>
+
+        <div class="portfolio-card card fade-up" data-category="Website">
+          <div class="portfolio-image">
+            <img src="https://placehold.co/600x400" alt="Landing Page Campaign" loading="lazy">
+          </div>
+
+          <div class="portfolio-content">
+            <span class="badge">Website</span>
+            <h3>Landing Page Campaign</h3>
+            <p>Landing page marketing dengan conversion rate mencapai 25%.</p>
+            <a href="#" class="btn btn-secondary">Lihat Detail</a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- === TESTIMONIAL === -->
+  <section id="testimonial">
+    <div class="container">
+
+      <div class="section-tag fade-up">
+        Testimoni
+      </div>
+
+      <h2 class="section-title fade-up">
+        Feedback dari client yang sudah pernah bekerja sama.
+      </h2>
+
+      <div class="testimonial-grid grid">
+
+        <div class="testimonial-card card fade-up">
+          <div class="stars">★★★★★</div>
+
+          <p>
+            “Progress pengerjaan jelas, komunikatif, dan hasil websitenya jauh lebih cepat dibanding versi sebelumnya. Bahkan tim marketing ikut senang karena conversion naik.”
+          </p>
+
+          <div class="testimonial-user">
+            <img src="https://placehold.co/60x60" alt="Client" loading="lazy">
+
+            <div>
+              <strong>Rina Amelia</strong>
+              <span>Marketing Manager</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card card fade-up">
+          <div class="stars">★★★★★</div>
+
+          <p>
+            “Jarang ketemu developer yang peduli detail performa sampai level kecil. Dashboard internal kami sekarang jauh lebih stabil dan nyaman dipakai.”
+          </p>
+
+          <div class="testimonial-user">
+            <img src="https://placehold.co/60x60" alt="Client" loading="lazy">
+
+            <div>
+              <strong>Andi Pratama</strong>
+              <span>Founder Startup</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card card fade-up">
+          <div class="stars">★★★★★</div>
+
+          <p>
+            “Design clean, loading cepat, dan maintenance lebih mudah. Yang paling penting: tidak menghilang pas revisi. Langka itu.”
+          </p>
+
+          <div class="testimonial-user">
+            <img src="https://placehold.co/60x60" alt="Client" loading="lazy">
+
+            <div>
+              <strong>Kevin Halim</strong>
+              <span>Business Owner</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- === CONTACT === -->
+  <section id="contact">
+    <div class="container">
+
+      <div class="section-tag fade-up">
+        Kontak
+      </div>
+
+      <h2 class="section-title fade-up">
+        Punya ide project? Mari diskusi.
+      </h2>
+
+      <div class="contact-box card fade-up">
+
+        <div class="contact-list">
+
+          <div class="contact-item">
+            <span>Email</span>
+            <h4>budi.santoso@email.com</h4>
+          </div>
+
+          <div class="contact-item">
+            <span>WhatsApp</span>
+            <h4>+6281112223334</h4>
+          </div>
+
+          <div class="contact-item">
+            <span>Lokasi</span>
+            <h4>Jakarta, WIB</h4>
+          </div>
+
+          <div class="contact-item">
+            <span>Jam Kerja</span>
+            <h4>Senin–Jumat, 09.00–18.00</h4>
+          </div>
+
+        </div>
+
+        <div>
+          <p class="section-desc" style="margin-bottom:28px;">
+            Jika Anda membutuhkan website company profile, aplikasi web custom, atau ingin meningkatkan performa website yang sudah ada, saya siap membantu dari tahap perencanaan sampai deployment.
+          </p>
+
+          <a
+            href="https://wa.me/6281112223334"
+            target="_blank"
+            class="btn btn-primary"
+          >
+            Chat via WhatsApp
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- === FOOTER === -->
+  <footer>
+    <div class="container footer-wrap">
+
+      <div class="footer-brand">
+        <h3>Budi Santoso</h3>
+        <p>Membangun web yang cepat, aman, dan scalable.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="#about">Tentang</a>
+        <a href="#services">Layanan</a>
+        <a href="#process">Cara Kerja</a>
+        <a href="#portfolio">Proyek</a>
+        <a href="#contact">Kontak</a>
+      </div>
+
+      <div class="footer-social">
+        <a href="https://instagram.com/budisantoso.dev" target="_blank">Instagram</a>
+        <a href="https://linkedin.com/in/budisantoso" target="_blank">LinkedIn</a>
+        <a href="https://github.com/budisantoso" target="_blank">GitHub</a>
+      </div>
+
+    </div>
+
+    <div class="container" style="margin-top:24px;">
+      <p style="color:var(--muted); font-size:.92rem;">
+        © 2026 Budi Santoso. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // === NAVBAR SCROLL EFFECT ===
+
+    const navbar = document.getElementById('navbar');
+
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // === MOBILE MENU ===
+
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('active');
+      });
+    });
+
+    // === ACTIVE NAV LINK ===
+
+    const sections = document.querySelectorAll('section[id]');
+    const navItems = document.querySelectorAll('.nav-links a');
+
+    const sectionObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          const id = entry.target.getAttribute('id');
+
+          navItems.forEach(link => {
+            link.classList.remove('active');
+
+            if(link.getAttribute('href') === `#${id}`){
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    },{
+      threshold:0.45
+    });
+
+    sections.forEach(section => {
+      sectionObserver.observe(section);
+    });
+
+    // === SCROLL ANIMATION ===
+
+    const fadeElements = document.querySelectorAll('.fade-up');
+
+    const fadeObserver = new IntersectionObserver(entries => {
+      entries.forEach((entry, index) => {
+        if(entry.isIntersecting){
+
+          setTimeout(() => {
+            entry.target.classList.add('show');
+          }, index * 80);
+
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    },{
+      threshold:0.15
+    });
+
+    fadeElements.forEach(el => {
+      fadeObserver.observe(el);
+    });
+
+    // === PORTFOLIO FILTER ===
+
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const portfolioCards = document.querySelectorAll('.portfolio-card');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        const filter = button.dataset.filter;
+
+        portfolioCards.forEach(card => {
+
+          if(filter === 'all' || card.dataset.category === filter){
+            card.style.display = 'block';
+
+            setTimeout(() => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            }, 50);
+
+          } else {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+              card.style.display = 'none';
+            }, 200);
+          }
+
+        });
+
+      });
+    });
+
+    // === SMOOTH SCROLL FALLBACK ===
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e){
+
+        const target = document.querySelector(this.getAttribute('href'));
+
+        if(target){
+          e.preventDefault();
+
+          target.scrollIntoView({
+            behavior:'smooth'
+          });
+        }
+
+      });
+    });
+  </script>
+
+</body>
+</html>

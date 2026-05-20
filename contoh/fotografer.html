@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dewi Lestari — Fotografer | Ocean Depths Portfolio</title>
+<meta name="description" content="Dewi Lestari — Fotografer profesional di Bali. Komersial, portrait, dan wedding photography dengan gaya editorial modern."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===RESET & TOKENS=== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --abyss:#020B1A;
+  --deep:#051A3A;
+  --ocean:#0D47A1;
+  --cyan:#00BCD4;
+  --foam:#80DEEA;
+  --ink:#E6F4F7;
+  --muted:rgba(230,244,247,.62);
+  --line:rgba(128,222,234,.14);
+  --display:'Fraunces',serif;
+  --body:'Inter',system-ui,sans-serif;
+  --max:1240px;
+  --r:18px;
+}
+html{scroll-behavior:smooth;background:var(--abyss);color:var(--ink);font-family:var(--body);font-size:16px;-webkit-font-smoothing:antialiased}
+body{
+  min-height:100vh;line-height:1.6;overflow-x:hidden;
+  background:
+    radial-gradient(1200px 700px at 80% -10%, rgba(0,188,212,.18), transparent 60%),
+    radial-gradient(900px 600px at -10% 30%, rgba(13,71,161,.35), transparent 60%),
+    radial-gradient(700px 500px at 50% 110%, rgba(128,222,234,.10), transparent 60%),
+    var(--abyss);
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+::selection{background:var(--cyan);color:var(--abyss)}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--abyss)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--ocean),var(--cyan));border-radius:10px}
+
+.container{width:min(100% - 2.5rem, var(--max));margin-inline:auto}
+.eyebrow{font-family:var(--body);font-size:.78rem;letter-spacing:.32em;text-transform:uppercase;color:var(--foam);display:inline-flex;align-items:center;gap:.6rem}
+.eyebrow::before{content:"";width:32px;height:1px;background:var(--foam);opacity:.6}
+h1,h2,h3,h4{font-family:var(--display);font-weight:400;letter-spacing:-.02em;line-height:1.05;color:var(--ink)}
+h2{font-size:clamp(2rem,4.4vw,3.4rem)}
+h2 em{font-style:italic;color:var(--foam);font-weight:300}
+section{padding:7rem 0;position:relative}
+.section-head{max-width:760px;margin-bottom:3.5rem}
+.section-head p{color:var(--muted);margin-top:1rem;font-size:1.05rem}
+
+/* ===NAVBAR=== */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:all .35s ease;padding:1.1rem 0}
+.nav.scrolled{background:rgba(2,11,26,.72);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);border-bottom:1px solid var(--line);padding:.7rem 0}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.logo{font-family:var(--display);font-size:1.35rem;font-weight:600;letter-spacing:-.02em;display:flex;align-items:center;gap:.55rem}
+.logo .dot{width:9px;height:9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 14px var(--cyan)}
+.logo span{color:var(--foam);font-style:italic;font-weight:300}
+.nav-menu{display:flex;gap:2rem;align-items:center}
+.nav-menu a{font-size:.92rem;color:var(--muted);position:relative;padding:.4rem 0;transition:color .25s}
+.nav-menu a:hover,.nav-menu a.active{color:var(--ink)}
+.nav-menu a.active::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:1px;background:var(--cyan)}
+.burger{display:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);align-items:center;justify-content:center}
+.burger span{display:block;width:18px;height:1.5px;background:var(--ink);position:relative;transition:.3s}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0;width:18px;height:1.5px;background:var(--ink);transition:.3s}
+.burger span::before{top:-6px}.burger span::after{top:6px}
+.burger.open span{background:transparent}
+.burger.open span::before{top:0;transform:rotate(45deg)}
+.burger.open span::after{top:0;transform:rotate(-45deg)}
+
+/* ===HERO=== */
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:8rem;padding-bottom:5rem;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%);opacity:.5;pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:4rem;align-items:center;position:relative}
+.hero-text .eyebrow{margin-bottom:1.8rem}
+.hero h1{font-size:clamp(2.8rem,6.2vw,5.4rem);font-weight:300;margin-bottom:1.6rem}
+.hero h1 .ital{font-style:italic;color:var(--foam);font-weight:400}
+.hero h1 .underline{position:relative;display:inline-block}
+.hero h1 .underline::after{content:"";position:absolute;left:0;bottom:.08em;height:.12em;width:100%;background:var(--cyan);opacity:.7;border-radius:2px}
+.hero-sub{font-size:1.1rem;color:var(--muted);max-width:520px;margin-bottom:2.4rem}
+.cta-row{display:flex;gap:1rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.6rem;padding:1rem 1.6rem;border-radius:999px;font-size:.95rem;font-weight:500;transition:.3s;border:1px solid transparent}
+.btn-primary{background:var(--cyan);color:var(--abyss)}
+.btn-primary:hover{background:var(--foam);transform:translateY(-2px);box-shadow:0 14px 40px -10px var(--cyan)}
+.btn-ghost{border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--cyan);background:rgba(0,188,212,.06);transform:translateY(-2px)}
+.btn svg{width:16px;height:16px;transition:transform .3s}
+.btn:hover svg{transform:translateX(3px)}
+
+.hero-visual{position:relative;aspect-ratio:4/5;border-radius:var(--r);overflow:hidden}
+.hero-visual img{width:100%;height:100%;object-fit:cover;filter:saturate(1.05) contrast(1.05)}
+.hero-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(2,11,26,.5) 100%);pointer-events:none}
+.hero-frame{position:absolute;inset:-12px;border:1px solid var(--line);border-radius:calc(var(--r) + 12px);pointer-events:none}
+.hero-badge{position:absolute;bottom:1.4rem;left:1.4rem;background:rgba(2,11,26,.7);backdrop-filter:blur(10px);border:1px solid var(--line);padding:.8rem 1.1rem;border-radius:14px;font-size:.78rem;color:var(--foam);display:flex;align-items:center;gap:.6rem;z-index:2}
+.hero-badge .pulse{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.4;transform:scale(.85)}}
+
+.hero-marquee{position:absolute;left:0;right:0;bottom:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;background:rgba(2,11,26,.5)}
+.marquee-track{display:flex;gap:3rem;padding:1rem 0;animation:marquee 30s linear infinite;white-space:nowrap}
+.marquee-track span{font-family:var(--display);font-style:italic;font-size:1rem;color:var(--muted)}
+.marquee-track span::after{content:"✦";margin-left:3rem;color:var(--cyan);font-style:normal}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ===ABOUT=== */
+.about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:4rem;align-items:center}
+.about-photo{position:relative}
+.about-photo img{width:100%;border-radius:var(--r);aspect-ratio:1/1;object-fit:cover}
+.about-photo::before{content:"";position:absolute;inset:18px -18px -18px 18px;border:1px solid var(--cyan);border-radius:var(--r);z-index:-1}
+.about-bio{font-size:1.06rem;color:var(--muted);margin:1.4rem 0 2rem;max-width:580px}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2rem}
+.feature{padding:1.4rem;border:1px solid var(--line);border-radius:14px;background:rgba(13,71,161,.08);transition:.3s}
+.feature:hover{border-color:var(--cyan);transform:translateY(-4px);background:rgba(0,188,212,.06)}
+.feature .ic{width:36px;height:36px;border-radius:10px;background:rgba(0,188,212,.12);display:flex;align-items:center;justify-content:center;color:var(--cyan);margin-bottom:.9rem}
+.feature h4{font-size:1.05rem;margin-bottom:.4rem;font-weight:600}
+.feature p{font-size:.86rem;color:var(--muted);line-height:1.55}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:3.5rem;padding-top:2.5rem;border-top:1px solid var(--line)}
+.stat .num{font-family:var(--display);font-size:clamp(1.8rem,3vw,2.4rem);color:var(--foam);font-weight:400}
+.stat .lbl{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:.3rem}
+
+/* ===SERVICES=== */
+.services-head{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-bottom:3.5rem;flex-wrap:wrap}
+.services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem}
+.svc{padding:2.2rem;border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(180deg,rgba(13,71,161,.12),rgba(5,26,58,.4));transition:.4s;position:relative;overflow:hidden}
+.svc::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0;transition:.4s}
+.svc:hover{transform:translateY(-6px);border-color:rgba(0,188,212,.4);box-shadow:0 24px 60px -20px rgba(0,188,212,.25)}
+.svc:hover::before{opacity:1}
+.svc-ic{width:54px;height:54px;border-radius:14px;background:rgba(0,188,212,.1);display:flex;align-items:center;justify-content:center;color:var(--cyan);margin-bottom:1.4rem;border:1px solid var(--line)}
+.svc h3{font-size:1.6rem;margin-bottom:.6rem}
+.svc > p{color:var(--muted);margin-bottom:1.4rem}
+.svc ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.55rem .8rem}
+.svc li{font-size:.88rem;color:var(--ink);display:flex;align-items:center;gap:.5rem}
+.svc li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--cyan)}
+.svc-cta{margin-top:3rem;padding:2rem;text-align:center;border:1px dashed var(--line);border-radius:var(--r);color:var(--muted)}
+.svc-cta a{color:var(--cyan);font-weight:500;border-bottom:1px solid var(--cyan)}
+
+/* ===PROCESS=== */
+.process-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;position:relative;margin-top:2rem}
+.process-timeline::before{content:"";position:absolute;top:32px;left:5%;right:5%;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);z-index:0}
+.step{position:relative;text-align:left;padding:1.5rem;background:var(--abyss);border:1px solid var(--line);border-radius:var(--r);z-index:1;transition:.3s}
+.step:hover{border-color:var(--cyan);transform:translateY(-4px)}
+.step-num{position:absolute;top:-14px;left:1.5rem;background:var(--cyan);color:var(--abyss);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:600;font-size:1rem}
+.step-ic{width:40px;height:40px;color:var(--foam);margin:1.2rem 0 1rem}
+.step h4{font-size:1.15rem;margin-bottom:.5rem}
+.step p{font-size:.88rem;color:var(--muted)}
+
+/* ===PORTFOLIO=== */
+.filter-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.filter-btn{padding:.55rem 1.1rem;border-radius:999px;border:1px solid var(--line);font-size:.85rem;color:var(--muted);transition:.25s}
+.filter-btn:hover{color:var(--ink);border-color:var(--foam)}
+.filter-btn.active{background:var(--cyan);color:var(--abyss);border-color:var(--cyan)}
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+.proj{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:rgba(5,26,58,.3);transition:.4s;display:flex;flex-direction:column}
+.proj:hover{transform:translateY(-6px);border-color:rgba(0,188,212,.4);box-shadow:0 20px 50px -20px rgba(0,188,212,.25)}
+.proj.hide{display:none}
+.proj-thumb{position:relative;aspect-ratio:3/2;overflow:hidden}
+.proj-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.proj:hover .proj-thumb img{transform:scale(1.08)}
+.badge{position:absolute;top:1rem;left:1rem;background:rgba(2,11,26,.78);backdrop-filter:blur(8px);color:var(--foam);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;padding:.4rem .75rem;border-radius:999px;border:1px solid var(--line)}
+.proj-body{padding:1.5rem;flex:1;display:flex;flex-direction:column}
+.proj-body h4{font-size:1.25rem;margin-bottom:.5rem}
+.proj-body p{color:var(--muted);font-size:.9rem;margin-bottom:1.2rem;flex:1}
+.proj-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--cyan);font-size:.85rem;font-weight:500;align-self:flex-start}
+.proj-link svg{width:14px;height:14px;transition:transform .3s}
+.proj:hover .proj-link svg{transform:translateX(4px)}
+
+/* ===TESTIMONIALS=== */
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+.test{padding:2rem;border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(180deg,rgba(13,71,161,.1),transparent);position:relative}
+.test .quote-mark{font-family:var(--display);font-size:4rem;color:var(--cyan);line-height:.5;opacity:.3;position:absolute;top:1.5rem;right:1.5rem}
+.stars{color:var(--cyan);font-size:.9rem;letter-spacing:.2em;margin-bottom:1rem}
+.test blockquote{font-family:var(--display);font-style:italic;font-size:1.05rem;color:var(--ink);line-height:1.5;margin-bottom:1.6rem;font-weight:300}
+.test-person{display:flex;align-items:center;gap:.9rem;padding-top:1.2rem;border-top:1px solid var(--line)}
+.test-person img{width:46px;height:46px;border-radius:50%;border:1px solid var(--line)}
+.test-person .nm{font-weight:500;font-size:.95rem}
+.test-person .rl{font-size:.78rem;color:var(--muted)}
+
+/* ===CONTACT=== */
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;padding:3.5rem;border:1px solid var(--line);border-radius:calc(var(--r) + 8px);background:linear-gradient(135deg,rgba(13,71,161,.18),rgba(0,188,212,.06));position:relative;overflow:hidden}
+.contact-wrap::before{content:"";position:absolute;inset:0;background:radial-gradient(600px 400px at 100% 0,rgba(0,188,212,.18),transparent 60%);pointer-events:none}
+.contact-list{display:flex;flex-direction:column;gap:1rem;margin:1.5rem 0 2rem}
+.contact-item{display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;border:1px solid var(--line);border-radius:14px;background:rgba(2,11,26,.4);transition:.25s}
+.contact-item:hover{border-color:var(--cyan);transform:translateX(4px)}
+.contact-item .ic{width:42px;height:42px;border-radius:10px;background:rgba(0,188,212,.12);display:flex;align-items:center;justify-content:center;color:var(--cyan);flex-shrink:0}
+.contact-item .lbl{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.contact-item .val{font-size:.98rem;margin-top:.15rem}
+.wa-cta{margin-top:1rem}
+
+/* ===FOOTER=== */
+footer{padding:4rem 0 2rem;border-top:1px solid var(--line);background:rgba(2,11,26,.5)}
+.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.foot-brand p{color:var(--muted);font-size:.92rem;margin-top:.8rem;max-width:340px}
+.foot h5{font-family:var(--body);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--foam);margin-bottom:1rem}
+.foot-links{display:flex;flex-direction:column;gap:.6rem}
+.foot-links a{color:var(--muted);font-size:.92rem;transition:.2s}
+.foot-links a:hover{color:var(--cyan)}
+.socials{display:flex;gap:.7rem}
+.socials a{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink);transition:.3s}
+.socials a:hover{background:var(--cyan);color:var(--abyss);border-color:var(--cyan);transform:translateY(-3px)}
+.copyright{padding-top:2rem;border-top:1px solid var(--line);text-align:center;font-size:.85rem;color:var(--muted)}
+
+/* ===ANIMATIONS=== */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}.reveal.d4{transition-delay:.4s}
+
+/* ===RESPONSIVE=== */
+@media (max-width:960px){
+  section{padding:5rem 0}
+  .hero{padding-top:7rem}
+  .hero-grid,.about-grid,.contact-wrap{grid-template-columns:1fr;gap:2.5rem}
+  .hero-visual{aspect-ratio:4/3;max-width:520px;margin:0 auto}
+  .services-grid,.test-grid,.proj-grid,.foot-grid{grid-template-columns:1fr}
+  .feature-grid{grid-template-columns:1fr;gap:.8rem}
+  .stats{grid-template-columns:repeat(2,1fr);gap:1.4rem}
+  .process-timeline{grid-template-columns:1fr;gap:1rem}
+  .process-timeline::before{display:none}
+  .burger{display:flex}
+  .nav-menu{position:fixed;top:0;right:0;height:100vh;width:min(80%,320px);background:rgba(2,11,26,.96);backdrop-filter:blur(20px);flex-direction:column;justify-content:center;gap:1.8rem;transform:translateX(100%);transition:.4s;border-left:1px solid var(--line)}
+  .nav-menu.open{transform:none}
+  .nav-menu a{font-size:1.15rem;font-family:var(--display)}
+  .contact-wrap{padding:2rem}
+  .svc{padding:1.6rem}
+  .svc ul{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  .stats{grid-template-columns:1fr 1fr}
+  .filter-bar{gap:.4rem}
+  .filter-btn{font-size:.78rem;padding:.45rem .9rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ===NAVBAR=== -->
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#hero" class="logo"><span class="dot"></span>Dewi <span>Lestari</span></a>
+    <div class="nav-menu" id="menu">
+      <a href="#about">Tentang</a>
+      <a href="#services">Layanan</a>
+      <a href="#process">Cara Kerja</a>
+      <a href="#portfolio">Proyek</a>
+      <a href="#contact">Kontak</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Menu"><span></span></button>
+  </div>
+</nav>
+
+<!-- ===HERO=== -->
+<header class="hero" id="hero">
+  <div class="container hero-grid">
+    <div class="hero-text">
+      <div class="eyebrow reveal">Fotografer · Bali, WITA</div>
+      <h1 class="reveal d1">Membekukan <span class="ital">momen</span>,<br/>menceritakan <span class="underline">kisah</span><br/>tanpa kata.</h1>
+      <p class="hero-sub reveal d2">Fotografi komersial, portrait, dan wedding dengan pendekatan editorial modern — dipercaya 200+ klien dari berbagai industri.</p>
+      <div class="cta-row reveal d3">
+        <a href="#services" class="btn btn-primary">Lihat Layanan
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#contact" class="btn btn-ghost">Hubungi Saya
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5a2 2 0 0 1 2-2h2l2 5-3 2a11 11 0 0 0 6 6l2-3 5 2v2a2 2 0 0 1-2 2A16 16 0 0 1 3 5z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual reveal d2">
+      <img src="https://picsum.photos/seed/fotografer/900/1125" alt="Karya fotografi editorial Dewi Lestari" loading="lazy"/>
+      <div class="hero-frame"></div>
+      <div class="hero-badge"><span class="pulse"></span>Tersedia untuk proyek 2026</div>
+    </div>
+  </div>
+  <div class="hero-marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Editorial</span><span>Komersial</span><span>Portrait</span><span>Wedding</span><span>Fine Art</span><span>Story-driven</span>
+      <span>Editorial</span><span>Komersial</span><span>Portrait</span><span>Wedding</span><span>Fine Art</span><span>Story-driven</span>
+    </div>
+  </div>
+</header>
+
+<!-- ===ABOUT=== -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-photo reveal">
+        <img src="https://placehold.co/400x400/051A3A/80DEEA?text=Dewi+Lestari" alt="Foto profil Dewi Lestari" loading="lazy"/>
+      </div>
+      <div class="about-text reveal d1">
+        <span class="eyebrow">Tentang Saya</span>
+        <h2 style="margin-top:1rem">Cahaya, ruang, dan <em>cerita</em> — tiga bahan utama saya.</h2>
+        <p class="about-bio">Saya Dewi, fotografer yang berbasis di Bali dengan lebih dari satu dekade pengalaman menangani 200+ klien — dari brand fashion lokal sampai pasangan yang merayakan hari paling berarti. Saya percaya foto terbaik lahir dari rasa nyaman, percakapan jujur, dan kepekaan terhadap detail. Setiap sesi saya rancang seperti mini editorial: ada mood, ada arahan, ada ruang untuk momen yang tak diatur.</p>
+        <div class="feature-grid">
+          <div class="feature">
+            <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/></svg></div>
+            <h4>Lighting Mastery</h4>
+            <p>Penguasaan pencahayaan alami dan studio untuk hasil maksimal.</p>
+          </div>
+          <div class="feature">
+            <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h12l4 4v12H4z"/><path d="M16 4v4h4M8 14h8M8 18h5"/></svg></div>
+            <h4>Storytelling</h4>
+            <p>Setiap foto memiliki narasi dan emosi yang kuat.</p>
+          </div>
+          <div class="feature">
+            <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.4 5 5.6.8-4 4 1 5.6L12 16l-5 2.4 1-5.6-4-4 5.6-.8z"/></svg></div>
+            <h4>Post-Production</h4>
+            <p>Editing profesional dengan warna konsisten dan natural.</p>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="num">200+</div><div class="lbl">Klien</div></div>
+          <div class="stat"><div class="num">12</div><div class="lbl">Tahun</div></div>
+          <div class="stat"><div class="num">85+</div><div class="lbl">Wedding</div></div>
+          <div class="stat"><div class="num">40+</div><div class="lbl">Brand</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===SERVICES=== -->
+<section id="services">
+  <div class="container">
+    <div class="services-head">
+      <div class="section-head reveal" style="margin-bottom:0">
+        <span class="eyebrow">Layanan</span>
+        <h2 style="margin-top:1rem">Dua fokus utama, <em>satu standar</em>.</h2>
+      </div>
+      <p class="reveal d1" style="color:var(--muted);max-width:340px">Setiap proyek dikerjakan dengan riset, mood board, dan delivery yang rapi.</p>
+    </div>
+    <div class="services-grid">
+      <article class="svc reveal">
+        <div class="svc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h3l2-3h8l2 3h3v13H3z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        <h3>Fotografi Komersial</h3>
+        <p>Foto produk dan brand berkualitas tinggi.</p>
+        <ul><li>Product shot</li><li>Food photography</li><li>Flat lay</li><li>Brand campaign</li></ul>
+      </article>
+      <article class="svc reveal d1">
+        <div class="svc-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <h3>Portrait &amp; Wedding</h3>
+        <p>Foto portrait dan wedding yang timeless.</p>
+        <ul><li>Engagement shoot</li><li>Wedding day</li><li>Portrait session</li><li>Fine art album</li></ul>
+      </article>
+    </div>
+    <div class="svc-cta reveal">Punya brief unik? <a href="#contact">Mari diskusi paket custom</a> sesuai kebutuhan proyekmu.</div>
+  </div>
+</section>
+
+<!-- ===PROCESS=== -->
+<section id="process">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Cara Kerja</span>
+      <h2 style="margin-top:1rem">Dari brief sampai <em>file final</em>.</h2>
+      <p>Empat tahap sederhana yang menjaga proyekmu tetap on-track, transparan, dan menyenangkan.</p>
+    </div>
+    <div class="process-timeline">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <svg class="step-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <h4>Diskusi Konsep</h4>
+        <p>Ngobrol santai soal mood, lokasi, dan referensi visual yang kamu inginkan.</p>
+      </div>
+      <div class="step reveal d1">
+        <div class="step-num">02</div>
+        <svg class="step-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>
+        <h4>Proposal &amp; Mood Board</h4>
+        <p>Penawaran dan arah visual dikirim dalam 1×24 jam, lengkap dengan timeline.</p>
+      </div>
+      <div class="step reveal d2">
+        <div class="step-num">03</div>
+        <svg class="step-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="12" rx="2"/><circle cx="12" cy="13" r="3"/><path d="M8 7l2-3h4l2 3"/></svg>
+        <h4>Hari Pemotretan</h4>
+        <p>Eksekusi terstruktur — arahan minimal, hasil maksimal, suasana tetap rileks.</p>
+      </div>
+      <div class="step reveal d3">
+        <div class="step-num">04</div>
+        <svg class="step-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg>
+        <h4>Edit &amp; Serah Terima</h4>
+        <p>Color grading sinematik, preview pilihan, file final via gallery online.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===PORTFOLIO=== -->
+<section id="portfolio">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Proyek Terpilih</span>
+      <h2 style="margin-top:1rem">Karya yang <em>berbicara</em>.</h2>
+      <p>Beberapa proyek yang paling berkesan — dari kampanye fashion sampai wedding intimate.</p>
+    </div>
+    <div class="filter-bar reveal d1" id="filterBar">
+      <button class="filter-btn active" data-filter="all">Semua</button>
+      <button class="filter-btn" data-filter="Komersial">Komersial</button>
+      <button class="filter-btn" data-filter="Food">Food</button>
+      <button class="filter-btn" data-filter="Wedding">Wedding</button>
+      <button class="filter-btn" data-filter="Portrait">Portrait</button>
+    </div>
+    <div class="proj-grid" id="projGrid">
+      <article class="proj reveal" data-cat="Komersial">
+        <div class="proj-thumb"><img src="https://placehold.co/600x400/0D47A1/E6F4F7?text=Fashion+Campaign" alt="Kampanye Fashion" loading="lazy"/><span class="badge">Komersial</span></div>
+        <div class="proj-body"><h4>Kampanye Fashion</h4><p>Memotori campaign fashion brand lokal yang tampil di majalah nasional.</p><a class="proj-link" href="#contact">Lihat Detail <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="proj reveal d1" data-cat="Food">
+        <div class="proj-thumb"><img src="https://placehold.co/600x400/051A3A/80DEEA?text=Menu+Restoran" alt="Menu Restoran" loading="lazy"/><span class="badge">Food Photography</span></div>
+        <div class="proj-body"><h4>Menu Restoran</h4><p>Fotografi menu untuk restoran fine dining yang meningkatkan pesanan 30%.</p><a class="proj-link" href="#contact">Lihat Detail <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="proj reveal d2" data-cat="Wedding">
+        <div class="proj-thumb"><img src="https://placehold.co/600x400/00BCD4/020B1A?text=Wedding+Bali" alt="Wedding Destination" loading="lazy"/><span class="badge">Wedding</span></div>
+        <div class="proj-body"><h4>Wedding Destination</h4><p>Mendokumentasikan wedding di Bali dengan 50+ foto editorial.</p><a class="proj-link" href="#contact">Lihat Detail <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="proj reveal" data-cat="Portrait">
+        <div class="proj-thumb"><img src="https://placehold.co/600x400/020B1A/00BCD4?text=Portrait+Series" alt="Portrait Profesional" loading="lazy"/><span class="badge">Portrait</span></div>
+        <div class="proj-body"><h4>Portrait Profesional</h4><p>Sesi portrait untuk 20+ eksekutif perusahaan teknologi.</p><a class="proj-link" href="#contact">Lihat Detail <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===TESTIMONIALS=== -->
+<section id="testimonials">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Testimoni</span>
+      <h2 style="margin-top:1rem">Kata mereka yang <em>pernah bekerja</em> bersama saya.</h2>
+    </div>
+    <div class="test-grid">
+      <div class="test reveal"><span class="quote-mark">“</span>
+        <div class="stars">★★★★★</div>
+        <blockquote>Dewi paham banget mood brand kami. Hasil campaign-nya bikin engagement Instagram naik 3x lipat dalam satu bulan.</blockquote>
+        <div class="test-person"><img src="https://placehold.co/60x60/0D47A1/80DEEA?text=AR" alt="Avatar"/><div><div class="nm">Anita Rahman</div><div class="rl">Founder, Laut Atelier</div></div></div>
+      </div>
+      <div class="test reveal d1"><span class="quote-mark">“</span>
+        <div class="stars">★★★★★</div>
+        <blockquote>Foto wedding kami terasa seperti scene film. Setiap kali buka albumnya, momennya kembali hidup. Worth every rupiah.</blockquote>
+        <div class="test-person"><img src="https://placehold.co/60x60/051A3A/00BCD4?text=MS" alt="Avatar"/><div><div class="nm">Maya &amp; Surya</div><div class="rl">Pengantin, Ubud 2025</div></div></div>
+      </div>
+      <div class="test reveal d2"><span class="quote-mark">“</span>
+        <div class="stars">★★★★★</div>
+        <blockquote>Profesional, on time, dan hasilnya konsisten. Kami sudah kerja sama untuk 4 menu launch berturut-turut.</blockquote>
+        <div class="test-person"><img src="https://placehold.co/60x60/00BCD4/020B1A?text=RT" alt="Avatar"/><div><div class="nm">Rendra Tanaya</div><div class="rl">Owner, Senja Dining</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===CONTACT=== -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-wrap reveal">
+      <div>
+        <span class="eyebrow">Mari Berkolaborasi</span>
+        <h2 style="margin-top:1rem">Punya cerita untuk <em>diabadikan</em>?</h2>
+        <p style="color:var(--muted);margin-top:1rem;max-width:420px">Cerita brief-mu, saya bantu rancang sesi foto yang pas. Balasan biasanya dalam 1×24 jam di hari kerja.</p>
+        <a href="https://wa.me/6281239876543" class="btn btn-primary wa-cta" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.8-.9-2-1s-.5-.1-.7.2-.8 1-1 1.2-.4.2-.7 0a8 8 0 0 1-2.4-1.5 9 9 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.5.3-.5a.5.5 0 0 0 0-.5L9 7c-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5 0-.8.4a3 3 0 0 0-1 2.3 5 5 0 0 0 1 2.7 11.6 11.6 0 0 0 4.5 4 15 15 0 0 0 1.5.5c.6.2 1.2.2 1.7.1.5-.1 1.6-.7 1.8-1.3.2-.6.2-1.1.1-1.2zM12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.3A10 10 0 1 0 12 2z"/></svg>
+          Chat via WhatsApp
+        </a>
+      </div>
+      <div class="contact-list">
+        <a class="contact-item" href="mailto:dewi.lestari@email.com">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+          <div><div class="lbl">Email</div><div class="val">dewi.lestari@email.com</div></div>
+        </a>
+        <a class="contact-item" href="https://wa.me/6281239876543">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5a2 2 0 0 1 2-2h2l2 5-3 2a11 11 0 0 0 6 6l2-3 5 2v2a2 2 0 0 1-2 2A16 16 0 0 1 3 5z"/></svg></div>
+          <div><div class="lbl">WhatsApp</div><div class="val">+62 812 3987 6543</div></div>
+        </a>
+        <div class="contact-item">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7.5 7-13a7 7 0 1 0-14 0c0 5.5 7 13 7 13z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+          <div><div class="lbl">Lokasi</div><div class="val">Bali, WITA</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <div><div class="lbl">Jam Kerja</div><div class="val">Sen–Sab · 07.00–18.00</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===FOOTER=== -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand foot">
+        <div class="logo"><span class="dot"></span>Dewi <span>Lestari</span></div>
+        <p>Membekukan momen, menceritakan kisah tanpa kata — dari Bali untuk klien di seluruh dunia.</p>
+      </div>
+      <div class="foot">
+        <h5>Navigasi</h5>
+        <div class="foot-links">
+          <a href="#about">Tentang</a>
+          <a href="#services">Layanan</a>
+          <a href="#process">Cara Kerja</a>
+          <a href="#portfolio">Proyek</a>
+          <a href="#contact">Kontak</a>
+        </div>
+      </div>
+      <div class="foot">
+        <h5>Ikuti</h5>
+        <div class="socials">
+          <a href="https://instagram.com/dewilestari.photo" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+          </a>
+          <a href="https://linkedin.com/in/dewilestari" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h4v16H4zM4 4a2 2 0 1 0 4 0 2 2 0 0 0-4 0z" fill="currentColor" stroke="none"/><path d="M10 9h4v2c.7-1.3 2.2-2.3 4-2.3 3 0 4 2 4 5V20h-4v-5c0-1.5-.5-2.5-2-2.5s-2 1-2 2.5V20h-4z" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="#" aria-label="CV"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="copyright">© 2026 Dewi Lestari. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+/* ===NAV SCROLL=== */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 30);
+});
+
+/* ===MOBILE MENU=== */
+const burger = document.getElementById('burger');
+const menu = document.getElementById('menu');
+burger.addEventListener('click', () => {
+  burger.classList.toggle('open');
+  menu.classList.toggle('open');
+});
+menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  burger.classList.remove('open');
+  menu.classList.remove('open');
+}));
+
+/* ===ACTIVE LINK OBSERVER=== */
+const links = menu.querySelectorAll('a');
+const sections = ['about','services','process','portfolio','contact'].map(id => document.getElementById(id));
+const navObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+    }
+  });
+}, { rootMargin: '-45% 0px -50% 0px' });
+sections.forEach(s => s && navObs.observe(s));
+
+/* ===REVEAL ON SCROLL=== */
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+/* ===PORTFOLIO FILTER=== */
+const filterBar = document.getElementById('filterBar');
+const projects = document.querySelectorAll('#projGrid .proj');
+filterBar.addEventListener('click', (e) => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const f = btn.dataset.filter;
+  projects.forEach(p => {
+    const show = f === 'all' || p.dataset.cat === f;
+    p.classList.toggle('hide', !show);
+  });
+});
+
+/* ===SMOOTH SCROLL FALLBACK=== */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    const id = a.getAttribute('href');
+    if (id.length > 1) {
+      const t = document.querySelector(id);
+      if (t) { e.preventDefault(); t.scrollIntoView({behavior:'smooth', block:'start'}); }
+    }
+  });
+});
+</script>
+</body>
+</html>
