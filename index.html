@@ -814,6 +814,36 @@ h1 .accent{color:var(--accent)}
             <option>Polos dengan overlay warna</option>
           </select>
         </div>
+        <div class="field">
+          <label>Tata Letak Hero</label>
+          <select id="herolayout">
+            <option value="">-- Biarkan AI pilih --</option>
+            <option value="center">Rata tengah (tanpa gambar samping)</option>
+            <option value="split">2 kolom dengan gambar/icon di sisi kanan</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Sumber Gambar</label>
+          <select id="imgsrc">
+            <option value="">-- Biarkan AI pilih --</option>
+            <option value="placehold">placehold.co (placeholder)</option>
+            <option value="unsplash">Unsplash (unsplash.com)</option>
+            <option value="picsum">Picsum (picsum.photos)</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>Pasangan Font (Google Fonts)</label>
+          <select id="fontpair">
+            <option value="">-- Biarkan AI pilih --</option>
+            <option value="Syne + DM Sans">Syne (display) + DM Sans (body)</option>
+            <option value="Playfair Display + Inter">Playfair Display (display) + Inter (body)</option>
+            <option value="Space Grotesk + Outfit">Space Grotesk (display) + Outfit (body)</option>
+            <option value="Cabinet Grotesk + Sora">Cabinet Grotesk (display) + Sora (body)</option>
+            <option value="Clash Display + Inter">Clash Display (display) + Inter (body)</option>
+            <option value="Plus Jakarta Sans + DM Sans">Plus Jakarta Sans (display) + DM Sans (body)</option>
+            <option value="Bricolage Grotesk + Nunito">Bricolage Grotesk (display) + Nunito (body)</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -1112,6 +1142,9 @@ function generatePrompt() {
   const suasana = v('suasana') || 'Biarkan AI pilih yang paling sesuai';
   const border  = v('border')  || 'Biarkan AI pilih';
   const efek    = v('efek')    || 'Biarkan AI pilih';
+  const herolayout = v('herolayout') || '';
+  const imgsrc = v('imgsrc') || '';
+  const fontpair = v('fontpair') || '';
   const colorSection = buildColorSection();
 
   const svcText = services.map((s, i) =>
@@ -1210,7 +1243,8 @@ SECTION YANG DIBUTUHKAN (8 section + footer)
    - Headline besar berorientasi hasil, turunkan dari tagline
    - Sub-headline dari deskripsi singkat
    - 2 tombol CTA: "Lihat Layanan" (scroll ke Services) & "Hubungi Saya" (scroll ke Contact)
-   - Semua konten hero rata tengah (center alignment)
+   - Tata letak: ${herolayout === 'center' ? 'rata tengah, semua konten di tengah, tanpa gambar samping' : herolayout === 'split' ? '2 kolom — teks di kiri, gambar/ilustrasi dekoratif di kanan, relevan dengan profesi ' + profesi : 'biarkan AI pilih tata letak yang paling cocok'}
+   ${herolayout === 'split' ? `- Gambar/ilustrasi di sisi kanan: ${imgsrc === 'unsplash' ? 'gunakan gambar dari Unsplash (unsplash.com) yang relevan dengan ' + profesi : imgsrc === 'picsum' ? 'gunakan gambar dari picsum.photos dengan seed yang relevan' : imgsrc === 'placehold' ? 'gunakan placehold.co dengan dimensi dan teks yang sesuai' : 'gunakan sumber gambar yang sesuai, bisa Unsplash atau placehold.co'}` : ''}
    - Animasi masuk: fade-in + slide-up staggered
 
 3. TENTANG SAYA
@@ -1256,8 +1290,7 @@ TEKNIS & KUALITAS KODE
 ================================================================
 
 - Satu file HTML: CSS di <style>, JS di <script>, no external files kecuali Google Fonts
-- Google Fonts: pilih 2 font — 1 display (karakter kuat, bukan Inter/Roboto/Arial),
-  1 body (bersih dan readable). Import via @import di dalam <style>
+- Google Fonts: ${fontpair ? (() => { const [d, b] = fontpair.split(' + '); return `gunakan font "${d}" (display) + "${b}" (body) — import via Google Fonts CDN`; })() : 'pilih 2 font — 1 display (karakter kuat), 1 body (bersih dan readable). Import via Google Fonts CDN'}
 - Fully responsive: 320px / 768px / 1280px+
 - Smooth scroll: CSS scroll-behavior: smooth + JS fallback
 - Animasi: hanya CSS transform + opacity, pakai IntersectionObserver untuk scroll-triggered
@@ -1789,6 +1822,9 @@ function loadDemoData(key) {
   projectIndex = 0;
   d.projects.forEach(p => addProject(p.nama, p.kategori, p.desc));
   if (d.suasana) document.getElementById('suasana').value = d.suasana;
+  if (d.herolayout) document.getElementById('herolayout').value = d.herolayout;
+  if (d.imgsrc) document.getElementById('imgsrc').value = d.imgsrc;
+  if (d.fontpair) document.getElementById('fontpair').value = d.fontpair;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
