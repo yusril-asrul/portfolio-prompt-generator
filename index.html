@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Prompt Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+/* ===RESET=== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0A0A0F;
+  --surface:#13131A;
+  --surface2:#1C1C26;
+  --border:#2A2A3A;
+  --accent:#E8FF47;
+  --accent2:#7B6EF6;
+  --text:#F0EFE8;
+  --muted:#7A7A8A;
+  --danger:#FF6B6B;
+  --success:#47FFB2;
+  --radius:12px;
+  --radius-lg:20px;
+}
+
+/* ===BASE=== */
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.6;
+}
+
+/* ===NOISE OVERLAY=== */
+.noise{
+  position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:256px;
+}
+
+/* ===GRID BG=== */
+body::before{
+  content:'';
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(232,255,71,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,255,71,.03) 1px, transparent 1px);
+  background-size:48px 48px;
+}
+
+/* ===APP WRAPPER=== */
+.app{
+  position:relative;z-index:1;
+  max-width:880px;
+  margin:0 auto;
+  padding:2rem 1.5rem 6rem;
+}
+
+/* ===HEADER=== */
+.header{
+  text-align:center;
+  padding:3.5rem 0 2.5rem;
+  position:relative;
+  overflow:hidden;
+}
+.header-bg-text{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-55%);
+  font-family:'Syne',sans-serif;
+  font-size:clamp(5rem,15vw,10rem);
+  font-weight:800;
+  letter-spacing:.15em;
+  white-space:nowrap;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(255,255,255,.04);
+  pointer-events:none;
+  user-select:none;
+}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(232,255,71,.08);
+  border:1px solid rgba(232,255,71,.25);
+  color:var(--accent);
+  font-size:11px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;
+  padding:7px 16px;border-radius:100px;
+  margin-bottom:1.5rem;
+}
+.badge-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--accent);
+  animation:blink 2s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2.2rem,5.5vw,3.5rem);
+  font-weight:800;
+  line-height:1.08;
+  letter-spacing:-.025em;
+  margin-bottom:.9rem;
+}
+h1 .accent{color:var(--accent)}
+.subtitle{
+  color:var(--muted);
+  font-size:1rem;
+  max-width:440px;
+  margin:0 auto;
+  line-height:1.65;
+}
+
+/* ===PROGRESS BAR=== */
+.progress-wrap{
+  height:2px;
+  background:rgba(255,255,255,.06);
+  border-radius:2px;
+  margin:2rem 0 1.5rem;
+  overflow:hidden;
+}
+.progress-fill{
+  height:100%;
+  background:var(--accent);
+  border-radius:2px;
+  transition:width .45s cubic-bezier(.4,0,.2,1);
+}
+
+/* ===STEPPER=== */
+.stepper{
+  display:flex;align-items:center;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:.75rem 1.25rem;
+  margin-bottom:2rem;
+  gap:4px;
+}
+.step-item{
+  display:flex;align-items:center;gap:10px;
+  flex:1;min-width:0;
+  cursor:pointer;
+  padding:.5rem .7rem;
+  border-radius:var(--radius);
+  transition:.2s ease;
+}
+.step-item:hover:not(.active){background:rgba(255,255,255,.03)}
+.step-item.active{background:rgba(232,255,71,.07)}
+.step-num{
+  width:28px;height:28px;border-radius:50%;
+  border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:600;
+  color:var(--muted);
+  transition:.2s ease;
+  flex-shrink:0;
+}
+.step-item.active .step-num{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#000;
+}
+.step-item.done .step-num{
+  background:rgba(71,255,178,.12);
+  border-color:rgba(71,255,178,.4);
+  color:var(--success);
+  font-size:14px;
+}
+.step-num-inner{display:block}
+.step-item.done .step-num-inner::before{content:'✓'}
+.step-item.done .step-num-inner{font-size:0}
+.step-item.done .step-num-inner::before{font-size:14px}
+.step-label{
+  font-size:12.5px;font-weight:500;
+  color:var(--muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  transition:.2s;
+}
+.step-item.active .step-label{color:var(--text)}
+.step-item.done .step-label{color:var(--success)}
+.step-divider{width:1px;height:22px;background:var(--border);flex-shrink:0;margin:0 2px}
+
+/* ===CARD=== */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:1.75rem;
+  margin-bottom:1.25rem;
+  animation:fadeUp .35s ease both;
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.card-header{margin-bottom:1.5rem}
+.card-title{
+  font-family:'Syne',sans-serif;
+  font-size:1.05rem;font-weight:700;
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:.3rem;
+}
+.card-title .icon{color:var(--accent);font-size:1rem}
+.card-desc{color:var(--muted);font-size:.85rem;line-height:1.55}
+
+/* ===FORM=== */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-grid.cols-1{grid-template-columns:1fr}
+.full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{
+  font-size:11.5px;font-weight:500;
+  color:var(--muted);
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+.field input,
+.field textarea,
+.field select{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  font-size:.9rem;
+  border-radius:var(--radius);
+  padding:.65rem .9rem;
+  outline:none;
+  transition:border-color .2s, box-shadow .2s;
+  width:100%;
+  -webkit-appearance:none;
+  appearance:none;
+}
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+  border-color:rgba(232,255,71,.5);
+  box-shadow:0 0 0 3px rgba(232,255,71,.07);
+}
+.field textarea{resize:vertical;min-height:80px;line-height:1.6}
+.field input::placeholder,
+.field textarea::placeholder{color:rgba(122,122,138,.55)}
+.field select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A7A8A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right .85rem center;
+  padding-right:2.2rem;
+  cursor:pointer;
+}
+.field select option{background:var(--surface2);color:var(--text)}
+.hint{font-size:11px;color:rgba(122,122,138,.7);margin-top:2px;line-height:1.45}
+.field.has-error input,
+.field.has-error textarea,
+.field.has-error select{border-color:rgba(255,107,107,.55)}
+.error-msg{font-size:11px;color:var(--danger);margin-top:2px}
+
+/* ===LAYANAN / PROYEK BLOCKS=== */
+.block-item{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:1.25rem;
+  margin-bottom:.85rem;
+  position:relative;
+  transition:border-color .2s;
+}
+.block-item:hover{border-color:rgba(255,255,255,.12)}
+.block-item:last-of-type{margin-bottom:0}
+.block-label{
+  font-size:.75rem;font-weight:600;
+  color:var(--accent);
+  text-transform:uppercase;letter-spacing:.12em;
+  margin-bottom:.9rem;
+}
+.remove-btn{
+  position:absolute;top:.85rem;right:.85rem;
+  background:rgba(255,107,107,.1);
+  border:1px solid rgba(255,107,107,.2);
+  color:var(--danger);
+  width:26px;height:26px;
+  border-radius:7px;
+  cursor:pointer;
+  font-size:13px;
+  display:flex;align-items:center;justify-content:center;
+  transition:.2s;line-height:1;
+}
+.remove-btn:hover{background:rgba(255,107,107,.22);border-color:rgba(255,107,107,.4)}
+.add-btn{
+  width:100%;
+  background:transparent;
+  border:1.5px dashed var(--border);
+  color:var(--muted);
+  font-family:'DM Sans',sans-serif;
+  font-size:.85rem;font-weight:500;
+  padding:.75rem;
+  border-radius:var(--radius);
+  cursor:pointer;
+  transition:.2s;
+  margin-top:.85rem;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.add-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(232,255,71,.04)}
+
+/* ===TEMA GRID=== */
+.theme-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(128px,1fr));
+  gap:.65rem;
+  margin-bottom:1.5rem;
+}
+.theme-card{
+  border:1.5px solid var(--border);
+  border-radius:var(--radius);
+  padding:.75rem .8rem;
+  cursor:pointer;
+  transition:.2s;
+  position:relative;
+  overflow:hidden;
+}
+.theme-card:hover{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.02)}
+.theme-card.selected{border-color:var(--accent);background:rgba(232,255,71,.05)}
+.theme-card.selected::after{
+  content:'✓';
+  position:absolute;top:5px;right:8px;
+  font-size:10px;color:var(--accent);
+  font-weight:700;
+}
+.theme-swatches{display:flex;gap:4px;margin-bottom:7px}
+.swatch{width:20px;height:20px;border-radius:50%;border:1px solid rgba(255,255,255,.1)}
+.theme-name{font-size:11px;font-weight:600;color:var(--text);margin-bottom:1px}
+.theme-type{font-size:10px;color:var(--muted)}
+.themes-divider{
+  text-align:center;
+  color:var(--muted);
+  font-size:.78rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin:1.25rem 0;
+  position:relative;
+}
+.themes-divider::before,.themes-divider::after{
+  content:'';
+  position:absolute;top:50%;
+  width:calc(50% - 60px);
+  height:1px;background:var(--border);
+}
+.themes-divider::before{left:0}
+.themes-divider::after{right:0}
+
+/* ===NAV BUTTONS=== */
+.nav-row{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:1.75rem;gap:1rem;
+}
+.btn{
+  font-family:'DM Sans',sans-serif;
+  font-weight:500;font-size:.9rem;
+  padding:.72rem 1.5rem;
+  border-radius:var(--radius);
+  cursor:pointer;
+  transition:.2s;border:none;
+  display:inline-flex;align-items:center;gap:7px;
+  line-height:1;
+}
+.btn-back{
+  background:var(--surface2);
+  color:var(--muted);
+  border:1px solid var(--border);
+}
+.btn-back:hover{color:var(--text);border-color:rgba(255,255,255,.18)}
+.btn-next{
+  background:var(--accent);
+  color:#000;font-weight:700;
+}
+.btn-next:hover{transform:translateY(-1px);box-shadow:0 5px 22px rgba(232,255,71,.22)}
+.btn-next:active{transform:translateY(0)}
+.btn-generate{
+  background:var(--accent);
+  color:#000;font-weight:700;font-size:1rem;
+  padding:.9rem 2rem;
+  width:100%;
+  justify-content:center;
+  border-radius:var(--radius);
+  position:relative;
+  overflow:hidden;
+}
+.btn-generate::before{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);
+  opacity:0;transition:.2s;
+}
+.btn-generate:hover::before{opacity:1}
+.btn-generate:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(232,255,71,.28)}
+
+/* ===SECTION PANELS=== */
+.section-panel{display:none}
+.section-panel.active{display:block}
+
+/* ===RESULT=== */
+.result-section{display:none}
+.result-section.visible{display:block;animation:fadeUp .45s ease}
+.result-top{
+  text-align:center;
+  padding:2rem 0 1.25rem;
+}
+.result-emoji{font-size:2.5rem;margin-bottom:.75rem}
+.result-top h2{
+  font-family:'Syne',sans-serif;
+  font-size:1.8rem;font-weight:800;
+  margin-bottom:.4rem;
+}
+.result-top p{color:var(--muted);font-size:.92rem}
+.result-actions{
+  display:flex;gap:.75rem;
+  margin-bottom:1.25rem;
+  flex-wrap:wrap;
+}
+.copy-btn{
+  display:flex;align-items:center;gap:6px;
+  background:var(--accent);color:#000;
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;font-size:.85rem;
+  padding:.6rem 1.2rem;
+  border-radius:var(--radius);
+  border:none;cursor:pointer;
+  transition:.2s;flex:1;justify-content:center;
+}
+.copy-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(232,255,71,.25)}
+.copy-btn.copied{background:var(--success);color:#000}
+.edit-btn{
+  display:flex;align-items:center;gap:6px;
+  background:var(--surface2);color:var(--muted);
+  font-family:'DM Sans',sans-serif;
+  font-weight:500;font-size:.85rem;
+  padding:.6rem 1.2rem;
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  cursor:pointer;
+  transition:.2s;flex:1;justify-content:center;
+}
+.edit-btn:hover{color:var(--text);border-color:rgba(255,255,255,.18)}
+.prompt-box{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:1.5rem;
+  font-family:'Courier New',Courier,monospace;
+  font-size:.78rem;
+  line-height:1.75;
+  color:#BFC0D0;
+  white-space:pre-wrap;
+  word-break:break-word;
+  max-height:520px;
+  overflow-y:auto;
+  scrollbar-width:thin;
+  scrollbar-color:var(--accent) transparent;
+}
+.prompt-box::-webkit-scrollbar{width:4px}
+.prompt-box::-webkit-scrollbar-track{background:transparent}
+.prompt-box::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
+.prompt-note{
+  background:rgba(123,110,246,.08);
+  border:1px solid rgba(123,110,246,.2);
+  border-radius:var(--radius);
+  padding:1rem 1.25rem;
+  margin-top:1.25rem;
+  font-size:.83rem;
+  color:rgba(200,198,255,.8);
+  line-height:1.6;
+}
+.prompt-note strong{color:rgba(200,198,255,1)}
+
+/* ===FOOTER=== */
+.footer{
+  text-align:center;
+  padding-top:3rem;
+  font-size:.78rem;
+  color:rgba(122,122,138,.45);
+}
+
+/* ===RESPONSIVE=== */
+@media(max-width:620px){
+  .form-grid{grid-template-columns:1fr}
+  .full{grid-column:1}
+  .stepper{padding:.6rem .75rem}
+  .step-label{display:none}
+  h1{font-size:1.9rem}
+  .header-bg-text{font-size:5rem}
+  .app{padding:1.25rem 1rem 4rem}
+  .card{padding:1.25rem}
+  .theme-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+  .result-actions{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="noise"></div>
+
+<div class="app">
+
+  <!-- ===HEADER=== -->
+  <header class="header">
+    <div class="header-bg-text">PROMPT</div>
+    <div class="badge"><span class="badge-dot"></span> Portfolio Generator</div>
+    <h1>Buat <span class="accent">Portfolio</span><br>Web-mu Sekarang</h1>
+    <p class="subtitle">Isi data kamu selangkah demi selangkah. Kami racik prompt-nya — tinggal copy &amp; paste ke Claude atau AI manapun.</p>
+  </header>
+
+  <!-- ===PROGRESS=== -->
+  <div class="progress-wrap">
+    <div class="progress-fill" id="progressFill" style="width:25%"></div>
+  </div>
+
+  <!-- ===STEPPER=== -->
+  <div class="stepper" id="stepper">
+    <div class="step-item active" data-step="1" onclick="gotoStep(1)">
+      <div class="step-num"><span class="step-num-inner">1</span></div>
+      <div class="step-label">Identitas</div>
+    </div>
+    <div class="step-divider"></div>
+    <div class="step-item" data-step="2" onclick="gotoStep(2)">
+      <div class="step-num"><span class="step-num-inner">2</span></div>
+      <div class="step-label">Layanan</div>
+    </div>
+    <div class="step-divider"></div>
+    <div class="step-item" data-step="3" onclick="gotoStep(3)">
+      <div class="step-num"><span class="step-num-inner">3</span></div>
+      <div class="step-label">Proyek</div>
+    </div>
+    <div class="step-divider"></div>
+    <div class="step-item" data-step="4" onclick="gotoStep(4)">
+      <div class="step-num"><span class="step-num-inner">4</span></div>
+      <div class="step-label">Desain</div>
+    </div>
+  </div>
+
+  <!-- ===STEP 1: IDENTITAS=== -->
+  <div class="section-panel active" id="step1">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="icon">✦</span> Identitas Diri</div>
+        <div class="card-desc">Data ini menjadi fondasi seluruh portfolio kamu. Isi sedetail mungkin agar hasilnya personal.</div>
+      </div>
+      <div class="form-grid">
+        <div class="field" id="f-nama">
+          <label>Nama / Brand *</label>
+          <input id="nama" type="text" placeholder="e.g. Rafi Akbar">
+        </div>
+        <div class="field" id="f-profesi">
+          <label>Profesi *</label>
+          <input id="profesi" type="text" placeholder="e.g. UI/UX Designer">
+        </div>
+        <div class="field full" id="f-tagline">
+          <label>Tagline *</label>
+          <input id="tagline" type="text" placeholder="e.g. Desain yang membuat pengguna jatuh cinta sejak detik pertama">
+          <span class="hint">Kalimat singkat yang menggambarkan nilai utama kamu, maks 10 kata</span>
+        </div>
+        <div class="field full" id="f-deskripsi">
+          <label>Deskripsi Singkat *</label>
+          <textarea id="deskripsi" placeholder="2-3 kalimat: siapa kamu, apa yang kamu lakukan, dan untuk siapa kamu bekerja"></textarea>
+        </div>
+        <div class="field">
+          <label>Kota / Timezone</label>
+          <input id="kota" type="text" placeholder="e.g. Makassar, WITA">
+        </div>
+        <div class="field">
+          <label>Jam Kerja</label>
+          <input id="jamkerja" type="text" placeholder="e.g. Senin–Sabtu, 09.00–18.00">
+        </div>
+        <div class="field" id="f-email">
+          <label>Email *</label>
+          <input id="email" type="email" placeholder="email@kamu.com">
+        </div>
+        <div class="field">
+          <label>WhatsApp</label>
+          <input id="wa" type="text" placeholder="+62812xxxxx (opsional)">
+        </div>
+        <div class="field">
+          <label>Instagram</label>
+          <input id="ig" type="text" placeholder="username tanpa @">
+        </div>
+        <div class="field">
+          <label>LinkedIn</label>
+          <input id="li" type="text" placeholder="username LinkedIn">
+        </div>
+        <div class="field">
+          <label>GitHub</label>
+          <input id="gh" type="text" placeholder="username GitHub">
+        </div>
+        <div class="field">
+          <label>Link CV / Resume</label>
+          <input id="cv" type="text" placeholder="URL file CV atau # jika belum ada">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="icon">✦</span> 3 Keunggulan Diri</div>
+        <div class="card-desc">Yang membedakan kamu dari profesional lain di bidang yang sama.</div>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Judul Keunggulan 1</label>
+          <input id="k1j" type="text" placeholder="e.g. Tepat Waktu">
+        </div>
+        <div class="field">
+          <label>Penjelasan</label>
+          <input id="k1d" type="text" placeholder="e.g. Selesai sesuai deadline, tanpa pengecualian">
+        </div>
+        <div class="field">
+          <label>Judul Keunggulan 2</label>
+          <input id="k2j" type="text" placeholder="e.g. Komunikasi Aktif">
+        </div>
+        <div class="field">
+          <label>Penjelasan</label>
+          <input id="k2d" type="text" placeholder="e.g. Selalu update perkembangan proyek secara real-time">
+        </div>
+        <div class="field">
+          <label>Judul Keunggulan 3</label>
+          <input id="k3j" type="text" placeholder="e.g. Revisi Fleksibel">
+        </div>
+        <div class="field">
+          <label>Penjelasan</label>
+          <input id="k3d" type="text" placeholder="e.g. Revisi sampai kamu benar-benar puas">
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <span></span>
+      <button class="btn btn-next" onclick="nextStep(1)">Lanjut: Layanan &rarr;</button>
+    </div>
+
+  </div>
+
+  <!-- ===STEP 2: LAYANAN=== -->
+  <div class="section-panel" id="step2">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="icon">✦</span> Layanan yang Ditawarkan</div>
+        <div class="card-desc">Tulis 2–4 layanan utama yang kamu sediakan. Semakin detail, semakin baik hasilnya.</div>
+      </div>
+      <div id="services-container"></div>
+      <button class="add-btn" onclick="addService()">
+        <span style="font-size:1.1rem;line-height:1">+</span> Tambah Layanan
+      </button>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="prevStep(2)">&larr; Kembali</button>
+      <button class="btn btn-next" onclick="nextStep(2)">Lanjut: Proyek &rarr;</button>
+    </div>
+
+  </div>
+
+  <!-- ===STEP 3: PROYEK=== -->
+  <div class="section-panel" id="step3">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="icon">✦</span> Portofolio Proyek</div>
+        <div class="card-desc">Tampilkan 4–6 proyek terbaikmu. Kalau belum punya proyek nyata, tulis proyek fiktif yang realistis dan masuk akal.</div>
+      </div>
+      <div id="projects-container"></div>
+      <button class="add-btn" onclick="addProject()">
+        <span style="font-size:1.1rem;line-height:1">+</span> Tambah Proyek
+      </button>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="prevStep(3)">&larr; Kembali</button>
+      <button class="btn btn-next" onclick="nextStep(3)">Lanjut: Desain &rarr;</button>
+    </div>
+
+  </div>
+
+  <!-- ===STEP 4: DESAIN=== -->
+  <div class="section-panel" id="step4">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="icon">✦</span> Tema Warna</div>
+        <div class="card-desc">Pilih salah satu tema siap pakai di bawah, atau isi warna custom sendiri menggunakan kode HEX.</div>
+      </div>
+      <div class="theme-grid" id="themeGrid"></div>
+      <div class="themes-divider">Atau custom warna sendiri</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Background Utama</label>
+          <input id="c-bg" type="text" placeholder="#0D0D0D" oninput="clearThemeSelection()">
+        </div>
+        <div class="field">
+          <label>Surface / Card</label>
+          <input id="c-surface" type="text" placeholder="#161616" oninput="clearThemeSelection()">
+        </div>
+        <div class="field">
+          <label>Teks Utama</label>
+          <input id="c-text" type="text" placeholder="#F0F0F0" oninput="clearThemeSelection()">
+        </div>
+        <div class="field">
+          <label>Teks Sekunder</label>
+          <input id="c-muted" type="text" placeholder="#888888" oninput="clearThemeSelection()">
+        </div>
+        <div class="field">
+          <label>Aksen Utama</label>
+          <input id="c-accent" type="text" placeholder="#3B82F6" oninput="clearThemeSelection()">
+        </div>
+        <div class="field">
+          <label>Aksen Kedua (opsional)</label>
+          <input id="c-accent2" type="text" placeholder="#14B8A6" oninput="clearThemeSelection()">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="icon">✦</span> Preferensi Visual</div>
+        <div class="card-desc">Tentukan karakter dan suasana tampilan website kamu.</div>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Suasana Visual</label>
+          <select id="suasana">
+            <option value="">-- Biarkan AI pilih --</option>
+            <option>Profesional &amp; bersih</option>
+            <option>Kreatif &amp; berani</option>
+            <option>Mewah &amp; elegan</option>
+            <option>Hangat &amp; personal</option>
+            <option>Modern &amp; techy</option>
+            <option>Minimalis &amp; rapi</option>
+            <option>Editorial &amp; artistik</option>
+            <option>Playful &amp; fun</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Gaya Border</label>
+          <select id="border">
+            <option value="">-- Biarkan AI pilih --</option>
+            <option>Rounded penuh</option>
+            <option>Sedikit rounded</option>
+            <option>Sharp/kotak</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>Efek Background</label>
+          <select id="efek">
+            <option value="">-- Biarkan AI pilih --</option>
+            <option>Dot grid</option>
+            <option>Garis diagonal</option>
+            <option>Noise texture</option>
+            <option>Gradient mesh</option>
+            <option>Geometric pattern</option>
+            <option>Bintang/partikel</option>
+            <option>Polos dengan overlay warna</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="prevStep(4)">&larr; Kembali</button>
+      <button class="btn btn-generate" onclick="generatePrompt()">✦ Generate Prompt Sekarang</button>
+    </div>
+
+  </div>
+
+  <!-- ===RESULT=== -->
+  <div class="result-section" id="resultSection">
+    <div class="result-top">
+      <div class="result-emoji">🎉</div>
+      <h2>Prompt Siap!</h2>
+      <p>Copy prompt di bawah, lalu paste ke <strong>Claude</strong> atau AI manapun untuk generate kode HTML portfolio kamu.</p>
+    </div>
+    <div class="result-actions">
+      <button class="copy-btn" id="copyBtn" onclick="copyPrompt()">⎘ Copy Seluruh Prompt</button>
+      <button class="edit-btn" onclick="editBack()">&larr; Edit Lagi</button>
+    </div>
+    <div class="prompt-box" id="promptOutput"></div>
+    <div class="prompt-note">
+      <strong>Cara pakai:</strong> Copy prompt di atas → buka Claude.ai atau AI lain → paste → send. Kamu akan mendapat satu file HTML lengkap yang siap disimpan sebagai <code>index.html</code> dan dibuka langsung di browser.<br><br>
+      <strong>Deploy gratis:</strong> Upload ke GitHub Pages, Netlify, atau Vercel — tanpa biaya apapun.
+    </div>
+  </div>
+
+  <div class="footer">Dibuat dengan ☕ &amp; dedikasi penuh</div>
+
+</div><!-- end .app -->
+
+<script>
+/* ===STATE=== */
+let currentStep = 1;
+let selectedTheme = '';
+let serviceIndex = 0;
+let projectIndex = 0;
+
+/* ===THEMES DATA=== */
+const THEMES = [
+  {name:'Midnight Tech',  type:'Gelap',   colors:['#0A0A0F','#161622','#E8FF47']},
+  {name:'Obsidian Gold',  type:'Gelap',   colors:['#12100E','#1C1916','#EAB308']},
+  {name:'Deep Navy',      type:'Gelap',   colors:['#060C1A','#0F1828','#14B8A6']},
+  {name:'Dark Coral',     type:'Gelap',   colors:['#110A08','#1C1210','#F97316']},
+  {name:'Noir Minimal',   type:'Gelap',   colors:['#000000','#111111','#E8E8E8']},
+  {name:'Dark Forest',    type:'Gelap',   colors:['#060E08','#0E1A10','#84CC16']},
+  {name:'Cream & Ink',    type:'Terang',  colors:['#F8F4EE','#F0EAE2','#C2410C']},
+  {name:'Paper White',    type:'Terang',  colors:['#FFFFFF','#F4F4F6','#1E3A8A']},
+  {name:'Sage Studio',    type:'Terang',  colors:['#F2F4F2','#E8ECE8','#4D7C0F']},
+  {name:'Warm Editorial', type:'Terang',  colors:['#FAF8F3','#F2EDE4','#92400E']},
+  {name:'Blush & Clay',   type:'Terang',  colors:['#FDF4F4','#F9E8E8','#BE123C']},
+  {name:'Arctic Clean',   type:'Terang',  colors:['#F8FAFB','#EEF4F8','#0369A1']},
+];
+
+/* ===RENDER THEMES=== */
+function renderThemes() {
+  const grid = document.getElementById('themeGrid');
+  grid.innerHTML = THEMES.map(t => `
+    <div class="theme-card" data-theme="${t.name}" onclick="selectTheme('${t.name}', this)">
+      <div class="theme-swatches">
+        ${t.colors.map(c => `<div class="swatch" style="background:${c}"></div>`).join('')}
+      </div>
+      <div class="theme-name">${t.name}</div>
+      <div class="theme-type">${t.type}</div>
+    </div>
+  `).join('');
+}
+
+function selectTheme(name, el) {
+  selectedTheme = name;
+  document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  ['c-bg','c-surface','c-text','c-muted','c-accent','c-accent2'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+}
+
+function clearThemeSelection() {
+  selectedTheme = '';
+  document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
+}
+
+/* ===ADD SERVICE=== */
+function addService(nama='', desc='', fitur='') {
+  serviceIndex++;
+  const id = serviceIndex;
+  const container = document.getElementById('services-container');
+  const el = document.createElement('div');
+  el.className = 'block-item';
+  el.id = `svc-${id}`;
+  el.innerHTML = `
+    <div class="block-label">Layanan ${id}</div>
+    <button class="remove-btn" onclick="removeEl('svc-${id}')" title="Hapus layanan ini">✕</button>
+    <div class="form-grid">
+      <div class="field">
+        <label>Nama Layanan</label>
+        <input type="text" id="sn-${id}" value="${nama}" placeholder="e.g. Website Design">
+      </div>
+      <div class="field">
+        <label>Deskripsi Singkat</label>
+        <input type="text" id="sd-${id}" value="${desc}" placeholder="1-2 kalimat tentang layanan ini">
+      </div>
+      <div class="field full">
+        <label>Fitur / Poin Unggulan (pisahkan dengan koma)</label>
+        <input type="text" id="sf-${id}" value="${fitur}" placeholder="e.g. Desain responsif, Revisi 3x, Dokumentasi lengkap, Fast delivery">
+      </div>
+    </div>
+  `;
+  container.appendChild(el);
+}
+
+/* ===ADD PROJECT=== */
+function addProject(nama='', kategori='', desc='') {
+  projectIndex++;
+  const id = projectIndex;
+  const container = document.getElementById('projects-container');
+  const el = document.createElement('div');
+  el.className = 'block-item';
+  el.id = `prj-${id}`;
+  el.innerHTML = `
+    <div class="block-label">Proyek ${id}</div>
+    <button class="remove-btn" onclick="removeEl('prj-${id}')" title="Hapus proyek ini">✕</button>
+    <div class="form-grid">
+      <div class="field">
+        <label>Nama Proyek / Klien</label>
+        <input type="text" id="pn-${id}" value="${nama}" placeholder="e.g. Rebrand Kopi Budi">
+      </div>
+      <div class="field">
+        <label>Kategori</label>
+        <input type="text" id="pk-${id}" value="${kategori}" placeholder="e.g. Branding / UI Design">
+      </div>
+      <div class="field full">
+        <label>Deskripsi</label>
+        <input type="text" id="pd-${id}" value="${desc}" placeholder="1-2 kalimat tentang proyek ini dan hasilnya">
+      </div>
+    </div>
+  `;
+  container.appendChild(el);
+}
+
+function removeEl(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+/* ===GET DATA HELPERS=== */
+function v(id) { return (document.getElementById(id)?.value || '').trim(); }
+
+function getServices() {
+  return Array.from(document.querySelectorAll('[id^="svc-"]')).map(b => {
+    const id = b.id.replace('svc-', '');
+    return {
+      nama: v(`sn-${id}`),
+      desc: v(`sd-${id}`),
+      fitur: v(`sf-${id}`)
+    };
+  }).filter(s => s.nama);
+}
+
+function getProjects() {
+  return Array.from(document.querySelectorAll('[id^="prj-"]')).map(b => {
+    const id = b.id.replace('prj-', '');
+    return {
+      nama: v(`pn-${id}`),
+      kategori: v(`pk-${id}`),
+      desc: v(`pd-${id}`)
+    };
+  }).filter(p => p.nama);
+}
+
+/* ===VALIDATION=== */
+function clearErrors() {
+  document.querySelectorAll('.field').forEach(f => {
+    f.classList.remove('has-error');
+    const e = f.querySelector('.error-msg');
+    if (e) e.remove();
+  });
+}
+
+function markError(wrapperId, msg) {
+  const f = document.getElementById(wrapperId);
+  if (!f) return;
+  f.classList.add('has-error');
+  if (!f.querySelector('.error-msg')) {
+    const p = document.createElement('p');
+    p.className = 'error-msg';
+    p.textContent = msg;
+    f.appendChild(p);
+  }
+}
+
+function validateStep(step) {
+  clearErrors();
+  let ok = true;
+  if (step === 1) {
+    if (!v('nama'))     { markError('f-nama',    'Nama wajib diisi'); ok = false; }
+    if (!v('profesi'))  { markError('f-profesi', 'Profesi wajib diisi'); ok = false; }
+    if (!v('tagline'))  { markError('f-tagline', 'Tagline wajib diisi'); ok = false; }
+    if (!v('deskripsi')){ markError('f-deskripsi','Deskripsi wajib diisi'); ok = false; }
+    if (!v('email'))    { markError('f-email',   'Email wajib diisi'); ok = false; }
+    if (!ok) window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+  if (step === 2) {
+    if (getServices().length < 1) { alert('Tambahkan minimal 1 layanan sebelum lanjut.'); ok = false; }
+  }
+  if (step === 3) {
+    if (getProjects().length < 1) { alert('Tambahkan minimal 1 proyek sebelum lanjut.'); ok = false; }
+  }
+  return ok;
+}
+
+/* ===STEPPER NAV=== */
+function updateStepper(step) {
+  document.querySelectorAll('.step-item').forEach(el => {
+    const s = parseInt(el.dataset.step);
+    el.classList.remove('active', 'done');
+    if (s === step) el.classList.add('active');
+    else if (s < step) el.classList.add('done');
+  });
+  document.getElementById('progressFill').style.width = (step / 4 * 100) + '%';
+}
+
+function showStep(step) {
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById('step' + step);
+  if (panel) panel.classList.add('active');
+  updateStepper(step);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextStep(from) {
+  if (!validateStep(from)) return;
+  currentStep = from + 1;
+  if (currentStep > 4) return;
+  showStep(currentStep);
+}
+
+function prevStep(from) {
+  currentStep = from - 1;
+  if (currentStep < 1) return;
+  showStep(currentStep);
+}
+
+function gotoStep(step) {
+  if (step >= currentStep) return;
+  currentStep = step;
+  showStep(step);
+}
+
+/* ===BUILD COLOR SECTION=== */
+function buildColorSection() {
+  const bg    = v('c-bg');
+  const surf  = v('c-surface');
+  const txt   = v('c-text');
+  const muted = v('c-muted');
+  const acc   = v('c-accent');
+  const acc2  = v('c-accent2');
+  const hasCustom = bg || surf || txt || muted || acc;
+
+  if (selectedTheme && !hasCustom) {
+    return `Tema pilihan  : ${selectedTheme}
+(Gunakan tema ini — interpretasikan nilai HEX yang paling tepat untuk setiap variabel warna)`;
+  }
+  if (hasCustom) {
+    return `Warna Custom (gunakan nilai ini persis di :root):
+  --color-bg       : ${bg      || '[tidak diisi — tentukan sendiri]'}
+  --color-surface  : ${surf    || '[tidak diisi — tentukan sendiri]'}
+  --color-text     : ${txt     || '[tidak diisi — tentukan sendiri]'}
+  --color-muted    : ${muted   || '[tidak diisi — tentukan sendiri]'}
+  --color-accent   : ${acc     || '[tidak diisi — tentukan sendiri]'}
+  --color-accent-2 : ${acc2    || '(tidak ada aksen kedua)'}`;
+  }
+  return `Tema pilihan  : Biarkan AI pilih yang paling cocok dan memorable untuk profesi ${v('profesi') || 'saya'}`;
+}
+
+/* ===GENERATE PROMPT=== */
+function generatePrompt() {
+  const nama      = v('nama');
+  const profesi   = v('profesi');
+  const tagline   = v('tagline');
+  const deskripsi = v('deskripsi');
+  const kota      = v('kota')     || '(tidak diisi)';
+  const jamkerja  = v('jamkerja') || '(tidak diisi)';
+  const email     = v('email');
+  const wa        = v('wa')       || '(tidak ada)';
+  const ig        = v('ig')       || '(tidak ada)';
+  const li        = v('li')       || '(tidak ada)';
+  const gh        = v('gh')       || '(tidak ada)';
+  const cv        = v('cv')       || '#';
+
+  const k1j = v('k1j') || 'Profesional';
+  const k1d = v('k1d') || 'Selalu mengutamakan kualitas kerja';
+  const k2j = v('k2j') || 'Tepat Waktu';
+  const k2d = v('k2d') || 'Setiap proyek selesai sesuai deadline';
+  const k3j = v('k3j') || 'Komunikatif';
+  const k3d = v('k3d') || 'Update progres secara berkala dan transparan';
+
+  const services = getServices();
+  const projects = getProjects();
+
+  const suasana = v('suasana') || 'Biarkan AI pilih yang paling sesuai';
+  const border  = v('border')  || 'Biarkan AI pilih';
+  const efek    = v('efek')    || 'Biarkan AI pilih';
+  const colorSection = buildColorSection();
+
+  const svcText = services.map((s, i) =>
+`LAYANAN ${i + 1}
+- Nama Layanan : ${s.nama}
+- Deskripsi    : ${s.desc || '(tidak diisi)'}
+- Fitur/Poin   : ${s.fitur || '(tidak diisi)'}`
+  ).join('\n\n');
+
+  const prjText = projects.map((p, i) =>
+`PROYEK ${i + 1}
+- Nama Proyek : ${p.nama}
+- Kategori    : ${p.kategori || '(tidak diisi)'}
+- Deskripsi   : ${p.desc || '(tidak diisi)'}`
+  ).join('\n\n');
+
+  const now = new Date();
+  const year = now.getFullYear();
+
+  const prompt =
+`Buatkan web portfolio satu halaman (single page) menggunakan HTML, CSS, dan JavaScript murni
+(tanpa framework eksternal). Semua CSS di dalam <style> dan semua JS di dalam <script>.
+Output berupa satu file HTML lengkap yang bisa langsung disimpan sebagai index.html
+dan dibuka di browser tanpa dependensi apapun selain Google Fonts via CDN.
+
+================================================================
+IDENTITAS PEMILIK PORTFOLIO
+================================================================
+
+- Nama             : ${nama}
+- Profesi          : ${profesi}
+- Tagline          : ${tagline}
+- Deskripsi singkat: ${deskripsi}
+- Kota / Timezone  : ${kota}
+- Jam Kerja        : ${jamkerja}
+- Email            : ${email}
+- WhatsApp         : ${wa}
+- Instagram        : ${ig}
+- LinkedIn         : ${li}
+- GitHub           : ${gh}
+- Link CV          : ${cv}
+
+================================================================
+KEUNGGULAN DIRI (untuk section About)
+================================================================
+
+- Keunggulan 1: ${k1j} — ${k1d}
+- Keunggulan 2: ${k2j} — ${k2d}
+- Keunggulan 3: ${k3j} — ${k3d}
+
+================================================================
+LAYANAN (untuk section Services)
+================================================================
+
+${svcText}
+
+================================================================
+CARA KERJA (untuk section Process)
+================================================================
+
+Buat 4 langkah proses kerja yang relevan dan realistis untuk profesi "${profesi}".
+Format: Nama Langkah — Penjelasan singkat 1 kalimat.
+Contoh referensi:
+- Konsultasi Gratis — Cerita kebutuhanmu, kita diskusi solusinya
+- Proposal & Harga — Penawaran transparan dikirim dalam 1×24 jam
+- Proses Pengerjaan — Update berkala, klien bisa pantau progresnya
+- Serah Terima — File/hasil dikirim lengkap dengan garansi revisi
+
+================================================================
+PROYEK / PORTFOLIO (untuk section Portfolio)
+================================================================
+
+${prjText}
+
+================================================================
+ESTETIKA & DESAIN
+================================================================
+
+${colorSection}
+Suasana visual : ${suasana}
+Gaya border    : ${border}
+Efek background: ${efek}
+
+================================================================
+SECTION YANG DIBUTUHKAN (8 section + footer)
+================================================================
+
+1. NAVBAR
+   - Logo teks (nama) di kiri
+   - Menu: Tentang, Layanan, Cara Kerja, Proyek, Kontak
+   - Sticky + glassmorphism/blur saat scroll
+   - Hamburger animasi untuk mobile
+   - Active state otomatis via IntersectionObserver
+
+2. HERO
+   - Headline besar berorientasi hasil, turunkan dari tagline
+   - Sub-headline dari deskripsi singkat
+   - 2 tombol CTA: "Lihat Layanan" (scroll ke Services) & "Hubungi Saya" (scroll ke Contact)
+   - Elemen visual dekoratif di sisi kanan: SVG abstrak atau geometris yang relevan dengan ${profesi}
+   - Animasi masuk: fade-in + slide-up staggered
+
+3. TENTANG SAYA
+   - Foto profil placeholder (https://placehold.co/400x400) dengan clip-path atau shape unik
+   - Bio dari deskripsi, dikembangkan jadi 3-4 kalimat hangat dan personal
+   - 3 card keunggulan sesuai data di atas
+   - Tombol "Download CV" → ${cv}
+   - Angka statistik (sesuaikan agar realistis untuk ${profesi})
+
+4. LAYANAN
+   - Card untuk setiap layanan dengan icon SVG inline yang relevan
+   - Hover effect halus (translateY + border glow)
+   - Jika lebih dari 2 layanan, tambahkan teks ajakan diskusi
+
+5. CARA KERJA
+   - Timeline 4 langkah: horizontal desktop / vertikal mobile
+   - Setiap langkah: nomor, icon SVG, nama, penjelasan
+   - Animasi muncul berurutan via IntersectionObserver
+
+6. PROYEK
+   - Grid responsif (3 kolom desktop / 2 tablet / 1 mobile)
+   - Filter tab berdasarkan kategori
+   - Setiap card: thumbnail (placehold.co/600x400), nama, badge kategori, deskripsi, tombol "Lihat Detail"
+   - Animasi card masuk saat pertama kali di viewport
+
+7. TESTIMONI
+   - 3 kartu testimoni fiktif tapi realistis untuk profesi ${profesi}
+   - Setiap kartu: avatar (placehold.co/60x60), nama, jabatan/bisnis, kutipan, bintang 5/5
+   - Layout grid 3 kolom atau slider horizontal
+
+8. KONTAK
+   - Form: Nama, Email, WhatsApp (opsional), Subjek, Pesan, tombol Kirim
+   - Validasi JS native, pesan sukses tanpa browser alert
+   - Info kontak: Email ${email}${wa !== '(tidak ada)' ? ', WhatsApp ' + wa : ''}, Kota ${kota}, Jam ${jamkerja}
+   ${wa !== '(tidak ada)' ? '- Tombol "Chat via WhatsApp" → wa.me/' + wa.replace(/[^0-9]/g,'') : ''}
+
+FOOTER
+   - Nama + tagline singkat
+   - Link navigasi cepat
+   - Icon social media${ig !== '(tidak ada)' ? ' Instagram:' + ig : ''}${li !== '(tidak ada)' ? ' LinkedIn:' + li : ''}${gh !== '(tidak ada)' ? ' GitHub:' + gh : ''} (sembunyikan icon yang tidak ada datanya)
+   - © ${year} ${nama}. All rights reserved.
+
+================================================================
+TEKNIS & KUALITAS KODE
+================================================================
+
+- Satu file HTML: CSS di <style>, JS di <script>, no external files kecuali Google Fonts
+- Google Fonts: pilih 2 font — 1 display (karakter kuat, bukan Inter/Roboto/Arial),
+  1 body (bersih dan readable). Import via @import di dalam <style>
+- Fully responsive: 320px / 768px / 1280px+
+- Smooth scroll: CSS scroll-behavior: smooth + JS fallback
+- Animasi: hanya CSS transform + opacity, pakai IntersectionObserver untuk scroll-triggered
+- Custom scrollbar sesuai palet warna
+- ::selection color sesuai tema
+- Semua gambar: placehold.co dengan dimensi proporsional + loading="lazy"
+- Hindari purple-gradient klise, hindari tampilan generik template
+- Kode diberi komentar /* ===NAMA SECTION=== */ di tiap section
+
+================================================================
+OUTPUT
+================================================================
+
+Berikan kode LENGKAP dalam SATU blok HTML. Pastikan:
+1. Semua placeholder sudah terisi dengan data yang diberikan di atas
+2. File bisa langsung disimpan sebagai index.html dan dibuka di browser
+3. Desain benar-benar UNIK dan MEMORABLE — bukan template generik
+4. Mencerminkan kepribadian dan profesi sebagai ${profesi}
+5. Tidak ada kode yang terpotong di tengah`;
+
+  document.getElementById('promptOutput').textContent = prompt;
+
+  // Hide all panels, show result
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('resultSection').classList.add('visible');
+  document.getElementById('progressFill').style.width = '100%';
+  document.querySelectorAll('.step-item').forEach(el => el.classList.add('done'));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ===COPY PROMPT=== */
+function copyPrompt() {
+  const text = document.getElementById('promptOutput').textContent;
+  const btn = document.getElementById('copyBtn');
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Tersalin!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '⎘ Copy Seluruh Prompt';
+      btn.classList.remove('copied');
+    }, 2800);
+  }).catch(() => {
+    // Fallback for older browsers
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = '✓ Tersalin!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '⎘ Copy Seluruh Prompt';
+      btn.classList.remove('copied');
+    }, 2800);
+  });
+}
+
+/* ===EDIT BACK=== */
+function editBack() {
+  document.getElementById('resultSection').classList.remove('visible');
+  showStep(currentStep);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ===INIT=== */
+renderThemes();
+
+// Default 2 services
+addService();
+addService();
+
+// Default 4 projects
+addProject();
+addProject();
+addProject();
+addProject();
+</script>
+
+</body>
+</html>
