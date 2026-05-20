@@ -480,6 +480,37 @@ h1 .accent{color:var(--accent)}
   color:rgba(122,122,138,.45);
 }
 
+/* ===DEMO BAR=== */
+.demo-bar{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(123,110,246,.06);
+  border:1px solid rgba(123,110,246,.15);
+  border-radius:var(--radius);
+  padding:.65rem 1rem;
+  margin: 1.5rem 0 0;
+  flex-wrap:wrap;
+}
+.demo-label{font-size:12px;font-weight:600;color:var(--accent2);white-space:nowrap}
+.demo-bar select{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  font-size:.82rem;
+  border-radius:8px;
+  padding:.4rem 1.8rem .4rem .7rem;
+  outline:none;
+  cursor:pointer;
+  -webkit-appearance:none;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237A7A8A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right .6rem center;
+  flex:1;min-width:160px;
+}
+.demo-bar select option{background:var(--surface2);color:var(--text)}
+.demo-hint{font-size:10.5px;color:rgba(122,122,138,.6);white-space:nowrap}
+
 /* ===RESPONSIVE=== */
 @media(max-width:620px){
   .form-grid{grid-template-columns:1fr}
@@ -507,6 +538,44 @@ h1 .accent{color:var(--accent)}
     <div class="badge"><span class="badge-dot"></span> Portfolio Generator</div>
     <h1>Buat <span class="accent">Portfolio</span><br>Web-mu Sekarang</h1>
     <p class="subtitle">Isi data kamu selangkah demi selangkah. Kami racik prompt-nya — tinggal copy &amp; paste ke Claude atau AI manapun.</p>
+    <!-- ===DEMO DATA=== -->
+    <div class="demo-bar">
+      <span class="demo-label">🎯 Coba Data Demo:</span>
+      <select id="demoSelect" onchange="loadDemoData(this.value)">
+        <option value="">— Pilih Profesi —</option>
+        <optgroup label="Desain &amp; Kreatif">
+          <option value="uiux">UI/UX Designer</option>
+          <option value="graphic">Graphic Designer</option>
+          <option value="illustrator">Illustrator</option>
+          <option value="motion">Motion Designer</option>
+          <option value="foto">Fotografer</option>
+          <option value="video">Video Editor</option>
+        </optgroup>
+        <optgroup label="Teknologi">
+          <option value="web">Web Developer</option>
+          <option value="frontend">Frontend Developer</option>
+          <option value="mobile">Mobile Developer</option>
+          <option value="ai">AI Engineer</option>
+          <option value="data">Data Scientist</option>
+          <option value="devops">DevOps Engineer</option>
+        </optgroup>
+        <optgroup label="Marketing &amp; Konten">
+          <option value="writer">Content Writer</option>
+          <option value="sosmed">Social Media Specialist</option>
+          <option value="marketer">Digital Marketer</option>
+          <option value="brand">Brand Strategist</option>
+        </optgroup>
+        <optgroup label="Bisnis &amp; Sales">
+          <option value="sales">Sales Executive</option>
+          <option value="pm">Product Manager</option>
+          <option value="project">Project Manager</option>
+        </optgroup>
+        <optgroup label="Lainnya">
+          <option value="arsitek">Arsitek</option>
+        </optgroup>
+      </select>
+      <span class="demo-hint">Isi otomatis semua field sesuai profesi</span>
+    </div>
   </header>
 
   <!-- ===PROGRESS=== -->
@@ -690,30 +759,11 @@ h1 .accent{color:var(--accent)}
       </div>
       <div class="theme-grid" id="themeGrid"></div>
       <div class="themes-divider">Atau custom warna sendiri</div>
-      <div class="form-grid">
-        <div class="field">
-          <label>Background Utama</label>
-          <input id="c-bg" type="text" placeholder="#0D0D0D" oninput="clearThemeSelection()">
-        </div>
-        <div class="field">
-          <label>Surface / Card</label>
-          <input id="c-surface" type="text" placeholder="#161616" oninput="clearThemeSelection()">
-        </div>
-        <div class="field">
-          <label>Teks Utama</label>
-          <input id="c-text" type="text" placeholder="#F0F0F0" oninput="clearThemeSelection()">
-        </div>
-        <div class="field">
-          <label>Teks Sekunder</label>
-          <input id="c-muted" type="text" placeholder="#888888" oninput="clearThemeSelection()">
-        </div>
-        <div class="field">
-          <label>Aksen Utama</label>
-          <input id="c-accent" type="text" placeholder="#3B82F6" oninput="clearThemeSelection()">
-        </div>
-        <div class="field">
-          <label>Aksen Kedua (opsional)</label>
-          <input id="c-accent2" type="text" placeholder="#14B8A6" oninput="clearThemeSelection()">
+      <div class="form-grid cols-1">
+        <div class="field full">
+          <label>Masukkan color palette</label>
+          <input id="c-palette" type="text" placeholder="#0A0A0F, #161622, #F0EFE8, #7A7A8A, #E8FF47, #7B6EF6" oninput="clearThemeSelection()">
+          <span class="hint">Masukkan kode HEX yang kamu suka, pisahkan dengan koma. AI akan mengatur penggunaannya secara otomatis.</span>
         </div>
       </div>
     </div>
@@ -833,9 +883,7 @@ function selectTheme(name, el) {
   selectedTheme = name;
   document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
-  ['c-bg','c-surface','c-text','c-muted','c-accent','c-accent2'].forEach(id => {
-    document.getElementById(id).value = '';
-  });
+  document.getElementById('c-palette').value = '';
 }
 
 function clearThemeSelection() {
@@ -1012,26 +1060,16 @@ function gotoStep(step) {
 
 /* ===BUILD COLOR SECTION=== */
 function buildColorSection() {
-  const bg    = v('c-bg');
-  const surf  = v('c-surface');
-  const txt   = v('c-text');
-  const muted = v('c-muted');
-  const acc   = v('c-accent');
-  const acc2  = v('c-accent2');
-  const hasCustom = bg || surf || txt || muted || acc;
+  const palette = v('c-palette');
+  const hasCustom = palette && palette.startsWith('#');
 
   if (selectedTheme && !hasCustom) {
     return `Tema pilihan  : ${selectedTheme}
-(Gunakan tema ini — interpretasikan nilai HEX yang paling tepat untuk setiap variabel warna)`;
+(Gunakan tema ini — pilih dan interpretasikan nilai HEX yang paling tepat untuk setiap elemen)`;
   }
   if (hasCustom) {
-    return `Warna Custom (gunakan nilai ini persis di :root):
-  --color-bg       : ${bg      || '[tidak diisi — tentukan sendiri]'}
-  --color-surface  : ${surf    || '[tidak diisi — tentukan sendiri]'}
-  --color-text     : ${txt     || '[tidak diisi — tentukan sendiri]'}
-  --color-muted    : ${muted   || '[tidak diisi — tentukan sendiri]'}
-  --color-accent   : ${acc     || '[tidak diisi — tentukan sendiri]'}
-  --color-accent-2 : ${acc2    || '(tidak ada aksen kedua)'}`;
+    return `Palette warna pilihan (gunakan warna-warna ini secara fleksibel di seluruh elemen — atur sendiri mana untuk bg, teks, aksen, dll):
+${palette}`;
   }
   return `Tema pilihan  : Biarkan AI pilih yang paling cocok dan memorable untuk profesi ${v('profesi') || 'saya'}`;
 }
@@ -1193,6 +1231,7 @@ SECTION YANG DIBUTUHKAN (8 section + footer)
    - Layout grid 3 kolom atau slider horizontal
 
 8. KONTAK
+   - Cukup informasi kontak saja, tanpa form (karena ini portfolio statis)
    - Info kontak: Email ${email}${wa !== '(tidak ada)' ? ', WhatsApp ' + wa : ''}, Kota ${kota}, Jam ${jamkerja}
    ${wa !== '(tidak ada)' ? '- Tombol "Chat via WhatsApp" → wa.me/' + wa.replace(/[^0-9]/g,'') : ''}
 
@@ -1273,6 +1312,473 @@ function copyPrompt() {
 function editBack() {
   document.getElementById('resultSection').classList.remove('visible');
   showStep(currentStep);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ===DEMO DATA=== */
+const DEMO_DATA = {
+  uiux: {
+    nama:'Alex Pratama', profesi:'UI/UX Designer',
+    tagline:'Desain yang membuat pengguna jatuh cinta sejak detik pertama',
+    deskripsi:'Saya adalah UI/UX Designer dengan 4+ tahun pengalaman dalam menciptakan antarmuka digital yang intuitif dan menarik. Spesialisasi saya meliputi desain aplikasi mobile dan web dengan fokus pada riset pengguna dan pengujian usability.',
+    kota:'Bandung, WIB', jamkerja:'Senin–Jumat, 09.00–18.00',
+    email:'alex.pratama@email.com', wa:'+6281234567890',
+    ig:'alexpratama.design', li:'alexpratama', gh:'alexpratama', cv:'#',
+    k1j:'Riset Mendalam', k1d:'Setiap desain didasari oleh data dan riset pengguna yang valid',
+    k2j:'Prototype Cepat', k2d:'Dari wireframe ke high-fidelity dalam hitungan hari',
+    k3j:'Design System', k3d:'Membangun sistem desain yang scalable dan konsisten',
+    services:[
+      {nama:'UI Design', desc:'Desain antarmuka yang modern dan responsif', fitur:'Wireframe, Prototype interaktif, Design System, Figma'},
+      {nama:'UX Research', desc:'Riset pengguna untuk produk yang lebih baik', fitur:'User interview, Usability testing, User journey, Persona'}
+    ],
+    projects:[
+      {nama:'Aplikasi Finansial', kategori:'UI/UX Design', desc:'Merancang ulang aplikasi fintech yang meningkatkan konversi 40%'},
+      {nama:'E-Commerce Platform', kategori:'UX Research', desc:'Riset pengguna untuk platform belanja online dengan 200+ responden'},
+      {nama:'Dashboard Analytics', kategori:'UI Design', desc:'Mendesain dashboard data kompleks menjadi visual yang mudah dipahami'},
+      {nama:'Aplikasi Kesehatan', kategori:'UI/UX Design', desc:'Aplikasi telemedicine dengan fokus aksesibilitas untuk lansia'}
+    ],
+    suasana:'Modern & techy'
+  },
+  video: {
+    nama:'Dinda Putri', profesi:'Video Editor',
+    tagline:'Mengubah footage mentah menjadi cerita visual yang memukau',
+    deskripsi:'Saya adalah Video Editor profesional dengan 5+ tahun pengalaman di industri kreatif. Spesialisasi saya meliputi editing video komersial, konten media sosial, dan film pendek dengan gaya storytelling yang kuat.',
+    kota:'Yogyakarta, WIB', jamkerja:'Senin–Sabtu, 10.00–21.00',
+    email:'dinda.putri@email.com', wa:'+6289876543210',
+    ig:'dindaputri.edit', li:'dindaputri', gh:'', cv:'#',
+    k1j:'Storytelling', k1d:'Setiap video memiliki narasi yang kuat dan emosional',
+    k2j:'Fast Turnaround', k2d:'Video selesai tepat waktu tanpa mengorbankan kualitas',
+    k3j:'Motion Graphics', k3d:'Animasi grafis yang memperkaya visual video',
+    services:[
+      {nama:'Video Komersial', desc:'Iklan dan konten promosi untuk brand', fitur:'Color grading, Sound design, Motion graphics, Caption'},
+      {nama:'Content Creator', desc:'Konten YouTube, TikTok, dan Instagram', fitur:'Fast editing, Trendy style, Thumbnail, Subtitles'}
+    ],
+    projects:[
+      {nama:'Brand Fashion', kategori:'Video Komersial', desc:'Video campaign fashion brand dengan gaya sinematik'},
+      {nama:'Channel YouTube', kategori:'Content Creator', desc:'Editing rutin untuk channel dengan 500k subscribers'},
+      {nama:'Company Profile', kategori:'Video Profil', desc:'Video profil perusahaan startup teknologi'},
+      {nama:'Music Video', kategori:'Film Pendek', desc:'Music video indie dengan visual efek kreatif'}
+    ],
+    suasana:'Kreatif & berani'
+  },
+  web: {
+    nama:'Budi Santoso', profesi:'Web Developer',
+    tagline:'Membangun web yang cepat, aman, dan scalable',
+    deskripsi:'Full-stack Web Developer dengan 5+ tahun pengalaman dalam mengembangkan aplikasi web modern. Menguasai React, Node.js, dan berbagai teknologi cloud. Fokus pada performa dan pengalaman pengguna.',
+    kota:'Jakarta, WIB', jamkerja:'Senin–Jumat, 09.00–18.00',
+    email:'budi.santoso@email.com', wa:'+6281112223334',
+    ig:'budisantoso.dev', li:'budisantoso', gh:'budisantoso', cv:'#',
+    k1j:'Clean Code', k1d:'Kode yang rapi, terstruktur, dan mudah dipelihara',
+    k2j:'Performa Optimal', k2d:'Website dengan skor Lighthouse 95+',
+    k3j:'Responsive Design', k3d:'Tampil sempurna di semua ukuran layar',
+    services:[
+      {nama:'Website Company Profile', desc:'Website profesional untuk bisnis Anda', fitur:'Responsive, SEO optimized, CMS, Hosting setup'},
+      {nama:'Web Application', desc:'Aplikasi web kustom sesuai kebutuhan', fitur:'React/Next.js, Node.js, Database, Deployment'}
+    ],
+    projects:[
+      {nama:'Sistem Inventaris', kategori:'Web App', desc:'Aplikasi manajemen inventaris real-time dengan 500+ pengguna'},
+      {nama:'Company Profile', kategori:'Website', desc:'Website perusahaan properti dengan performa tinggi'},
+      {nama:'E-Learning Platform', kategori:'Web App', desc:'Platform kursus online dengan fitur live streaming'},
+      {nama:'Landing Page Campaign', kategori:'Website', desc:'Landing page dengan konversi 25% untuk campaign marketing'}
+    ],
+    suasana:'Minimalis & rapi'
+  },
+  ai: {
+    nama:'Sarah Wijaya', profesi:'AI Engineer',
+    tagline:'Mengubah data menjadi kecerdasan yang berdampak',
+    deskripsi:'AI Engineer dengan background riset Machine Learning dan pengalaman deploy model ke production. Spesialisasi NLP dan Computer Vision. Percaya bahwa AI harus accessible dan memberikan nilai nyata.',
+    kota:'Tangerang, WIB', jamkerja:'Senin–Jumat, 08.00–17.00',
+    email:'sarah.wijaya@email.com', wa:'+6285556667778',
+    ig:'sarahwijaya.ai', li:'sarahwijaya', gh:'sarahwijaya', cv:'#',
+    k1j:'Production-Ready', k1d:'Model AI yang siap deploy dan terintegrasi dengan sistem existing',
+    k2j:'End-to-End', k2d:'Dari data preprocessing hingga monitoring model di production',
+    k3j:'Explainable AI', k3d:'Model yang transparan dan bisa dijelaskan ke stakeholder',
+    services:[
+      {nama:'Machine Learning', desc:'Model prediktif untuk bisnis Anda', fitur:'Data pipeline, Model training, API deployment, Monitoring'},
+      {nama:'AI Consulting', desc:'Konsultasi strategi AI untuk perusahaan', fitur:'Feasibility study, Tech stack, Roadmap, PoC'}
+    ],
+    projects:[
+      {nama:'Chatbot Customer Service', kategori:'NLP', desc:'Chatbot AI yang menangani 80% pertanyaan customer secara otomatis'},
+      {nama:'Quality Inspection', kategori:'Computer Vision', desc:'Sistem deteksi cacat produk dengan akurasi 97%'},
+      {nama:'Predictive Maintenance', kategori:'ML', desc:'Model prediksi kerusakan mesin yang menghemat biaya perawatan 35%'},
+      {nama:'Recommendation System', kategori:'ML', desc:'Sistem rekomendasi produk untuk e-commerce dengan 10M+ data'}
+    ],
+    suasana:'Modern & techy'
+  },
+  sales: {
+    nama:'Rina Amelia', profesi:'Sales Executive',
+    tagline:'Membangun hubungan, menciptakan solusi, menghasilkan dampak',
+    deskripsi:'Sales Executive dengan 6+ tahun pengalaman di industri teknologi dan SaaS. Terbukti konsisten mencapai target 120%+ setiap kuartal. Spesialisasi B2B sales dengan pendekatan consultative selling.',
+    kota:'Surabaya, WIB', jamkerja:'Senin–Sabtu, 08.00–17.00',
+    email:'rina.amelia@email.com', wa:'+6283334445556',
+    ig:'rinaamelia.sales', li:'rinaamelia', gh:'', cv:'#',
+    k1j:'Consultative Selling', k1d:'Memahami kebutuhan klien sebelum menawarkan solusi',
+    k2j:'Closing Tinggi', k2d:'Conversion rate 35% dari lead ke closed deal',
+    k3j:'Client Retention', k3d:'90% klien repeat order dan referral',
+    services:[
+      {nama:'B2B Sales Consultation', desc:'Strategi penjualan untuk bisnis ke bisnis', fitur:'Lead generation, Sales pipeline, Negotiation, Closing'},
+      {nama:'Sales Training', desc:'Pelatihan tim sales untuk performa maksimal', fitur:'Sales script, Role play, CRM training, KPI setting'}
+    ],
+    projects:[
+      {nama:'SaaS Platform', kategori:'B2B Sales', desc:'Menutup deal enterprise senilai Rp 2M dengan perusahaan fintech'},
+      {nama:'EdTech Startup', kategori:'Sales Strategy', desc:'Membangun sales pipeline dari 0 ke 50+ sekolah dalam 6 bulan'},
+      {nama:'Sales Team Training', kategori:'Training', desc:'Melatih 20+ sales person yang meningkatkan revenue 45%'},
+      {nama:'Market Expansion', kategori:'B2B Sales', desc:'Ekspansi penjualan ke 5 kota baru dengan total revenue Rp 5M'}
+    ],
+    suasana:'Profesional & bersih'
+  },
+  sosmed: {
+    nama:'Maya Fitriani', profesi:'Social Media Specialist',
+    tagline:'Menciptakan konten viral yang membangun komunitas',
+    deskripsi:'Social Media Specialist dengan 4+ tahun pengalaman mengelola brand awareness di Instagram, TikTok, dan LinkedIn. Ahli dalam strategi konten, community management, dan analitik media sosial. Membantu brand tumbuh secara organik.',
+    kota:'Malang, WIB', jamkerja:'Senin–Jumat, 09.00–18.00',
+    email:'maya.fitriani@email.com', wa:'+6287778889990',
+    ig:'mayafitriani.social', li:'mayafitriani', gh:'', cv:'#',
+    k1j:'Viral Strategy', k1d:'Konten yang dirancang untuk engagement maksimal dan reach organik',
+    k2j:'Data-Driven', k2d:'Setiap keputusan konten berdasarkan data dan analitik',
+    k3j:'Community Building', k3d:'Membangun komunitas yang loyal dan aktif',
+    services:[
+      {nama:'Social Media Management', desc:'Manajemen penuh akun media sosial Anda', fitur:'Content plan, Copywriting, Desain grafis, Scheduling'},
+      {nama:'Content Strategy', desc:'Strategi konten yang relevan dan engaging', fitur:'Brand voice, Trend research, Analytics, Campaign'}
+    ],
+    projects:[
+      {nama:'Fashion Brand', kategori:'Instagram Growth', desc:'Menaikkan followers dari 5K ke 50K dalam 4 bulan'},
+      {nama:'Food Startup', kategori:'TikTok Campaign', desc:'Kampanye TikTok yang mencapai 2M views dalam 1 minggu'},
+      {nama:'Tech Company', kategori:'LinkedIn Strategy', desc:'Meningkatkan engagement LinkedIn perusahaan 300%'},
+      {nama:'Beauty Product', kategori:'Brand Awareness', desc:'Campaign brand awareness dengan reach 1M+ dalam 1 bulan'}
+    ],
+    suasana:'Playful & fun'
+  },
+  // ===DESAIN & KREATIF===
+  graphic: {
+    nama:'Citra Maharani', profesi:'Graphic Designer',
+    tagline:'Mengubah ide menjadi visual yang berkesan dan komunikatif',
+    deskripsi:'Graphic Designer dengan 5+ tahun pengalaman di agency kreatif dan brand ternama. Spesialisasi dalam brand identity, desain cetak, dan visual marketing. Percaya bahwa desain yang baik adalah desain yang bercerita.',
+    kota:'Jakarta, WIB', jamkerja:'Senin–Jumat, 09.00–18.00',
+    email:'citra.maharani@email.com', wa:'+6282112345678',
+    ig:'citramaharani.design', li:'citramaharani', gh:'', cv:'#',
+    k1j:'Brand Identity', k1d:'Membangun identitas visual yang kuat dan konsisten untuk brand',
+    k2j:'Tipografi', k2d:'Penguasaan tipografi yang presisi dan estetis',
+    k3j:'Creative Direction', k3d:'Mengarahkan konsep visual dari awal hingga final',
+    services:[
+      {nama:'Brand Identity', desc:'Identitas visual lengkap untuk brand Anda', fitur:'Logo, Color palette, Tipografi, Stationery, Brand guidelines'},
+      {nama:'Desain Cetak', desc:'Materi cetak berkualitas tinggi', fitur:'Brosur, Katalog, Kemasan, Poster, Annual report'}
+    ],
+    projects:[
+      {nama:'Rebrand Coffee Shop', kategori:'Brand Identity', desc:'Membangun identitas visual baru untuk coffee shop lokal yang meningkatkan brand recognition 60%'},
+      {nama:'Katalog Fashion', kategori:'Desain Cetak', desc:'Mendesain katalog koleksi fashion dengan fotografi dan layout premium'},
+      {nama:'Packaging Product', kategori:'Desain Kemasan', desc:'Mendesain kemasan produk skincare yang memenangkan award kemasan terbaik 2024'},
+      {nama:'Visual Campaign', kategori:'Creative Direction', desc:'Mengarahkan campaign visual brand kecantikan dengan 20+ aset visual'}
+    ],
+    suasana:'Kreatif & berani'
+  },
+  illustrator: {
+    nama:'Rizky Ardiansyah', profesi:'Illustrator',
+    tagline:'Membuat ilustrasi yang hidup, penuh cerita dan karakter',
+    deskripsi:'Illustrator profesional dengan spesialisasi di bidang ilustrasi digital, karakter design, dan children\'s book. Karya telah diterbitkan oleh 10+ penerbit dan digunakan oleh berbagai brand nasional.',
+    kota:'Yogyakarta, WIB', jamkerja:'Senin–Sabtu, 08.00–17.00',
+    email:'rizky.ardiansyah@email.com', wa:'+6285744332211',
+    ig:'rizkyardiansyah.draw', li:'rizkyardiansyah', gh:'', cv:'#',
+    k1j:'Character Design', k1d:'Menciptakan karakter unik dengan kepribadian yang kuat',
+    k2j:'Visual Storytelling', k2d:'Ilustrasi yang mampu menyampaikan narasi secara visual',
+    k3j:'Versatile Style', k3d:'Menguasai berbagai gaya ilustrasi dari realistis hingga kartun',
+    services:[
+      {nama:'Ilustrasi Digital', desc:'Ilustrasi kustom untuk berbagai kebutuhan', fitur:'Karakter, Scene, Infografis, Pattern'},
+      {nama:'Children\'s Book', desc:'Ilustrasi buku anak yang penuh imajinasi', fitur:'Storyboard, Karakter, Layout buku, Cover'}
+    ],
+    projects:[
+      {nama:'Buku Cerita Anak', kategori:'Children\'s Book', desc:'Mengilustrasikan buku cerita anak yang diterbitkan oleh penerbit nasional'},
+      {nama:'Character Mascot', kategori:'Character Design', desc:'Mendesain maskot karakter untuk brand minuman yang menjadi ikon campaign'},
+      {nama:'Kampanye Sosial', kategori:'Ilustrasi Digital', desc:'Ilustrasi untuk kampanye sosial dengan 10+ visual yang viral di media sosial'},
+      {nama:'Wall Mural', kategori:'Public Art', desc:'Mural digital untuk kafe yang menjadi spot foto favorit pengunjung'}
+    ],
+    suasana:'Playful & fun'
+  },
+  motion: {
+    nama:'Bayu Pratama', profesi:'Motion Designer',
+    tagline:'Menghidupkan desain dengan gerakan yang memukau',
+    deskripsi:'Motion Designer dengan 6+ tahun pengalaman di industri kreatif dan periklanan. Spesialisasi dalam animasi 2D, motion graphics, dan visual efek. Telah mengerjakan proyek untuk brand nasional dan internasional.',
+    kota:'Bandung, WIB', jamkerja:'Senin–Jumat, 09.00–19.00',
+    email:'bayu.pratama@email.com', wa:'+6289654321098',
+    ig:'bayupratama.motion', li:'bayupratama', gh:'', cv:'#',
+    k1j:'Motion Graphics', k1d:'Animasi grafis yang informatif dan estetis',
+    k2j:'2D Animation', k2d:'Animasi karakter 2D dengan gerakan yang natural dan ekspresif',
+    k3j:'Visual Effects', k3d:'Efek visual yang memperkaya tanpa mengganggu pesan utama',
+    services:[
+      {nama:'Motion Graphics', desc:'Animasi grafis untuk konten dan promosi', fitur:'Explainer video, Animasi logo, Kinetic typography, Infografis animasi'},
+      {nama:'Animasi 2D', desc:'Animasi karakter dan storytelling', fitur:'Character rigging, Lip sync, Scene composition, Background design'}
+    ],
+    projects:[
+      {nama:'TV Commercial', kategori:'Motion Graphics', desc:'Membuat iklan TV animasi untuk brand minuman yang tayang di 5 stasiun TV nasional'},
+      {nama:'Video Perusahaan', kategori:'Motion Graphics', desc:'Video profil perusahaan dengan animasi data dan infografis dinamis'},
+      {nama:'Series Animasi', kategori:'2D Animation', desc:'Menganimasikan series edukasi anak yang ditonton 1M+ kali di YouTube'},
+      {nama:'Event Opener', kategori:'Motion Graphics', desc:'Animasi pembuka untuk event nasional dengan 5000+ peserta'}
+    ],
+    suasana:'Kreatif & berani'
+  },
+  foto: {
+    nama:'Dewi Lestari', profesi:'Fotografer',
+    tagline:'Membekukan momen, menceritakan kisah tanpa kata',
+    deskripsi:'Fotografer profesional dengan spesialisasi fotografi komersial, portrait, dan wedding. Berpengalaman menangani 200+ klien dari berbagai industri. Menggabungkan teknik klasik dengan gaya editorial modern.',
+    kota:'Bali, WITA', jamkerja:'Senin–Sabtu, 07.00–18.00',
+    email:'dewi.lestari@email.com', wa:'+6281239876543',
+    ig:'dewilestari.photo', li:'dewilestari', gh:'', cv:'#',
+    k1j:'Lighting Mastery', k1d:'Penguasaan pencahayaan alami dan studio untuk hasil maksimal',
+    k2j:'Storytelling', k2d:'Setiap foto memiliki narasi dan emosi yang kuat',
+    k3j:'Post-Production', k3d:'Editing profesional dengan warna yang konsisten dan natural',
+    services:[
+      {nama:'Fotografi Komersial', desc:'Foto produk dan brand berkualitas tinggi', fitur:'Product shot, Food photography, Flat lay, Brand campaign'},
+      {nama:'Portrait & Wedding', desc:'Foto portrait dan wedding yang timeless', fitur:'Engagement shoot, Wedding day, Portrait session, Fine art album'}
+    ],
+    projects:[
+      {nama:'Kampanye Fashion', kategori:'Komersial', desc:'Memotori campaign fashion brand lokal yang tampil di majalah nasional'},
+      {nama:'Menu Restoran', kategori:'Food Photography', desc:'Fotografi menu untuk restoran fine dining yang meningkatkan pesanan 30%'},
+      {nama:'Wedding Destination', kategori:'Wedding', desc:'Mendokumentasikan wedding di Bali dengan 50+ foto editorial'},
+      {nama:'Portrait Profesional', kategori:'Portrait', desc:'Sesi portrait untuk 20+ eksekutif perusahaan teknologi'}
+    ],
+    suasana:'Editorial & artistik'
+  },
+  // ===TEKNOLOGI===
+  mobile: {
+    nama:'Fajar Nugraha', profesi:'Mobile App Developer',
+    tagline:'Membangun aplikasi mobile yang cepat, indah, dan andal',
+    deskripsi:'Mobile Developer dengan 4+ tahun pengalaman mengembangkan aplikasi native Android dan iOS menggunakan Kotlin, Swift, serta Flutter. Telah merilis 10+ aplikasi ke Play Store dan App Store dengan rating rata-rata 4.8.',
+    kota:'Jakarta, WIB', jamkerja:'Senin–Jumat, 09.00–18.00',
+    email:'fajar.nugraha@email.com', wa:'+6287887654321',
+    ig:'fajarnugraha.dev', li:'fajarnugraha', gh:'fajarnugraha', cv:'#',
+    k1j:'Multi-Platform', k1d:'Satu kode untuk Android dan iOS dengan Flutter',
+    k2j:'Clean Architecture', k2d:'Kode terstruktur yang scalable dan mudah di-maintain',
+    k3j:'UI/UX Detail', k3d:'Implementasi desain yang presisi hingga level pixel',
+    services:[
+      {nama:'Aplikasi Mobile', desc:'Aplikasi mobile kustom dari konsep hingga rilis', fitur:'Flutter/React Native, API integration, Push notification, Play Store & App Store submission'},
+      {nama:'Aplikasi IoT', desc:'Aplikasi untuk perangkat Internet of Things', fitur:'Bluetooth LE, MQTT, Real-time monitoring, Sensor integration'}
+    ],
+    projects:[
+      {nama:'Aplikasi E-Commerce', kategori:'Mobile App', desc:'Aplikasi belanja dengan 100K+ download dan rating 4.7 di Play Store'},
+      {nama:'IoT Smart Home', kategori:'IoT', desc:'Aplikasi kontrol perangkat smart home dengan koneksi real-time via MQTT'},
+      {nama:'Fitness Tracker', kategori:'Mobile App', desc:'Aplikasi fitness dengan integrasi health API dan gamifikasi'},
+      {nama:'POS System', kategori:'Mobile App', desc:'Sistem POS mobile untuk UMKM yang melayani 500+ transaksi per hari'}
+    ],
+    suasana:'Modern & techy'
+  },
+  data: {
+    nama:'Dr. Andi Permana', profesi:'Data Scientist',
+    tagline:'Mengungkap wawasan tersembunyi dari data untuk keputusan bisnis',
+    deskripsi:'Data Scientist dengan gelar Master dari ITB dan 5+ tahun pengalaman di industri fintech dan e-commerce. Ahli dalam machine learning, statistical modeling, dan data visualization. Membantu perusahaan meningkatkan efisiensi hingga 40% melalui pendekatan data-driven.',
+    kota:'Bandung, WIB', jamkerja:'Senin–Jumat, 08.00–17.00',
+    email:'andi.permana@email.com', wa:'+6281344556677',
+    ig:'andipermana.data', li:'andipermana', gh:'andipermana', cv:'#',
+    k1j:'Statistical Modeling', k1d:'Model statistik yang akurat dan bisa diandalkan untuk prediksi',
+    k2j:'Data Visualization', k2d:'Visualisasi data yang memudahkan stakeholder memahami insight',
+    k3j:'Big Data', k3d:'Mengolah dan menganalisis data berskala besar dengan efisien',
+    services:[
+      {nama:'Data Analytics', desc:'Analisis data untuk insight bisnis', fitur:'Data cleaning, Exploratory analysis, Dashboard, Reporting'},
+      {nama:'Machine Learning', desc:'Model prediktif untuk optimasi bisnis', fitur:'Predictive modeling, Classification, Clustering, Recommendation system'}
+    ],
+    projects:[
+      {nama:'Customer Churn', kategori:'ML', desc:'Model prediksi churn yang mengurangi customer loss hingga 25%'},
+      {nama:'Dashboard Revenue', kategori:'Analytics', desc:'Dashboard real-time untuk monitoring revenue perusahaan e-commerce'},
+      {nama:'Fraud Detection', kategori:'ML', desc:'Sistem deteksi fraud yang memblokir 95% transaksi mencurigakan'},
+      {nama:'Sentiment Analysis', kategori:'NLP', desc:'Analisis sentimen produk dari 50K+ review pelanggan'}
+    ],
+    suasana:'Modern & techy'
+  },
+  devops: {
+    nama:'Hendra Gunawan', profesi:'DevOps Engineer',
+    tagline:'Membangun infrastruktur yang tangguh dan deployment yang mulus',
+    deskripsi:'DevOps Engineer dengan 6+ tahun pengalaman mengelola infrastruktur cloud dan CI/CD pipeline. Bersertifikasi AWS Solutions Architect dan Google Cloud Engineer. Spesialisasi dalam Docker, Kubernetes, dan Infrastructure as Code.',
+    kota:'Tangerang, WIB', jamkerja:'Senin–Jumat, 09.00–18.00',
+    email:'hendra.gunawan@email.com', wa:'+6282112233445',
+    ig:'hendragunawan.devops', li:'hendragunawan', gh:'hendragunawan', cv:'#',
+    k1j:'Cloud Infrastructure', k1d:'Desain arsitektur cloud yang scalable dan cost-effective',
+    k2j:'Automation', k2d:'Otomatisasi semua proses deployment dan monitoring',
+    k3j:'Disaster Recovery', k3d:'Sistem backup dan recovery yang menjamin zero data loss',
+    services:[
+      {nama:'Cloud Migration', desc:'Migrasi infrastruktur ke cloud dengan downtime minimal', fitur:'AWS/GCP/Azure, Migration plan, Cost optimization, Security hardening'},
+      {nama:'CI/CD Pipeline', desc:'Pipeline otomatis untuk deployment yang cepat dan aman', fitur:'Docker, Kubernetes, GitHub Actions, Monitoring & logging'}
+    ],
+    projects:[
+      {nama:'Cloud Migration', kategori:'Cloud', desc:'Migrasi infrastruktur perusahaan fintech ke AWS dengan zero downtime'},
+      {nama:'Microservices Setup', kategori:'DevOps', desc:'Membangun arsitektur microservices dengan Kubernetes untuk startup SaaS'},
+      {nama:'CI/CD Pipeline', kategori:'Automation', desc:'Pipeline deployment otomatis yang mempercepat rilis dari 2 minggu ke 1 hari'},
+      {nama:'Monitoring System', kategori:'Observability', desc:'Sistem monitoring real-time untuk 50+ layanan dengan alerting cerdas'}
+    ],
+    suasana:'Minimalis & rapi'
+  },
+  frontend: {
+    nama:'Sinta Permata', profesi:'Frontend Developer',
+    tagline:'Menciptakan antarmuka web yang indah, cepat, dan responsif',
+    deskripsi:'Frontend Developer dengan 4+ tahun pengalaman di React, Vue.js, dan TypeScript. Spesialis dalam membangun antarmuka yang cepat, aksesibel, dan responsif. Terbiasa bekerja dengan desainer untuk menghasilkan produk yang sempurna secara visual dan teknis.',
+    kota:'Surabaya, WIB', jamkerja:'Senin–Jumat, 09.00–18.00',
+    email:'sinta.permatasari@email.com', wa:'+6285766778899',
+    ig:'sintapermata.dev', li:'sintapermata', gh:'sintapermata', cv:'#',
+    k1j:'Pixel Perfect', k1d:'Implementasi desain yang akurat hingga detail terkecil',
+    k2j:'Performance', k2d:'Website dengan skor Core Web Vitals terbaik',
+    k3j:'Accessibility', k3d:'Antarmuka yang dapat diakses oleh semua pengguna',
+    services:[
+      {nama:'Website Development', desc:'Website modern dengan performa tinggi', fitur:'React/Next.js, Tailwind CSS, Framer Motion, SEO'},
+      {nama:'Web Application', desc:'Aplikasi web interaktif dan kompleks', fitur:'TypeScript, State management, API integration, PWA'}
+    ],
+    projects:[
+      {nama:'Dashboard Admin', kategori:'Web App', desc:'Dashboard admin dengan visualisasi data real-time dan 50+ komponen'},
+      {nama:'Landing Page Animasi', kategori:'Website', desc:'Landing page dengan animasi yang meningkatkan conversion rate 35%'},
+      {nama:'E-Commerce Frontend', kategori:'Web App', desc:'Frontend e-commerce dengan performa skor Lighthouse 98'},
+      {nama:'Design System', kategori:'Component Library', desc:'Membangun design system dengan 60+ komponen reusable'}
+    ],
+    suasana:'Minimalis & rapi'
+  },
+  // ===MARKETING & KONTEN===
+  writer: {
+    nama:'Riani Putri', profesi:'Content Writer',
+    tagline:'Kata-kata yang tepat, pada audiens yang tepat, di waktu yang tepat',
+    deskripsi:'Content Writer dan Copywriter dengan 5+ tahun pengalaman menulis untuk berbagai industri — teknologi, lifestyle, keuangan, dan kesehatan. Telah menulis 500+ artikel blog, 200+ copy iklan, dan 10+ website copy untuk brand nasional.',
+    kota:'Malang, WIB', jamkerja:'Senin–Jumat, 08.00–17.00',
+    email:'riani.putri@email.com', wa:'+6285855566778',
+    ig:'rianiputri.writes', li:'rianiputri', gh:'', cv:'#',
+    k1j:'SEO Writing', k1d:'Konten yang ramah mesin pencari tanpa mengorbankan kualitas',
+    k2j:'Versatile Tone', k2d:'Mampu menulis dalam berbagai nada suara brand',
+    k3j:'Research-Driven', k3d:'Setiap tulisan didukung riset mendalam dan data akurat',
+    services:[
+      {nama:'Copywriting', desc:'Copy yang meyakinkan dan mengkonversi', fitur:'Landing page, Email marketing, Iklan, Sales page'},
+      {nama:'Content Marketing', desc:'Konten blog dan strategi konten', fitur:'Artikel SEO, Pillar content, Content calendar, Guest post'}
+    ],
+    projects:[
+      {nama:'Website Copy', kategori:'Copywriting', desc:'Menulis ulang website copy perusahaan SaaS yang meningkatkan konversi 2x'},
+      {nama:'Blog Program', kategori:'Content Marketing', desc:'Menulis 40 artikel SEO yang mendatangkan 50K+ traffic organik per bulan'},
+      {nama:'Email Campaign', kategori:'Copywriting', desc:'Email drip campaign dengan open rate 45% dan click rate 12%'},
+      {nama:'Social Media Content', kategori:'Content Marketing', desc:'Copy untuk 200+ post Instagram yang meningkatkan engagement rate 150%'}
+    ],
+    suasana:'Hangat & personal'
+  },
+  marketer: {
+    nama:'Dimas Ardianto', profesi:'Digital Marketer',
+    tagline:'Strategi digital yang terukur, kreatif, dan berdampak',
+    deskripsi:'Digital Marketer dengan 6+ tahun pengalaman mengelola campaign multi-channel. Ahli dalam SEO, SEM, Social Media Ads, dan Email Marketing. Telah mengelola budget iklan total Rp 20M+ dengan ROAS rata-rata 4.5x.',
+    kota:'Jakarta, WIB', jamkerja:'Senin–Jumat, 09.00–18.00',
+    email:'dimas.ardianto@email.com', wa:'+6281299887766',
+    ig:'dimasardianto.marketing', li:'dimasardianto', gh:'', cv:'#',
+    k1j:'Data-Driven Strategy', k1d:'Keputusan marketing berdasarkan data dan analitik',
+    k2j:'Full-Funnel', k2d:'Mengelola marketing dari awareness hingga conversion',
+    k3j:'ROI Focused', k3d:'Setiap campaign dirancang untuk menghasilkan ROI maksimal',
+    services:[
+      {nama:'Digital Strategy', desc:'Strategi marketing digital menyeluruh', fitur:'Market research, Competitor analysis, Channel strategy, Budget planning'},
+      {nama:'Paid Ads', desc:'Iklan berbayar yang efektif dan efisien', fitur:'Meta Ads, Google Ads, TikTok Ads, Performance reporting'}
+    ],
+    projects:[
+      {nama:'Campaign Launch', kategori:'Digital Strategy', desc:'Strategi peluncuran produk yang mencapai 1M+ impressions dalam 2 minggu'},
+      {nama:'Meta Ads Optimization', kategori:'Paid Ads', desc:'Optimalisasi iklan Facebook/Instagram yang menurunkan CPA 40%'},
+      {nama:'SEO Overhaul', kategori:'SEO', desc:'Perombakan SEO website yang menaikkan traffic organik 200% dalam 3 bulan'},
+      {nama:'Growth Campaign', kategori:'Digital Strategy', desc:'Campaign growth yang meningkatkan revenue 3x dalam 1 kuartal'}
+    ],
+    suasana:'Profesional & bersih'
+  },
+  brand: {
+    nama:'Vania Kusuma', profesi:'Brand Strategist',
+    tagline:'Membangun brand yang dikenal, diingat, dan dicintai',
+    deskripsi:'Brand Strategist dengan 7+ tahun pengalaman membantu startup hingga perusahaan nasional membangun positioning brand yang kuat. Kombinasi riset pasar, consumer psychology, dan creative strategy untuk menciptakan brand yang relevan dan berdampak.',
+    kota:'Jakarta, WIB', jamkerja:'Senin–Jumat, 09.00–18.00',
+    email:'vania.kusuma@email.com', wa:'+6281566778899',
+    ig:'vaniakusuma.strategy', li:'vaniakusuma', gh:'', cv:'#',
+    k1j:'Brand Positioning', k1d:'Menemukan posisi unik brand di pasar yang kompetitif',
+    k2j:'Consumer Insight', k2d:'Memahami audiens lebih dalam dari siapapun',
+    k3j:'Brand Architecture', k3d:'Membangun struktur brand yang jelas dan scalable',
+    services:[
+      {nama:'Brand Strategy', desc:'Strategi brand dari fondasi hingga eksekusi', fitur:'Brand audit, Positioning, Brand architecture, Naming & messaging'},
+      {nama:'Brand Identity', desc:'Identitas visual yang mencerminkan strategi brand', fitur:'Visual direction, Brand guidelines, Campaign concept, Brand activation'}
+    ],
+    projects:[
+      {nama:'Rebrand Startup', kategori:'Brand Strategy', desc:'Rebrand startup fintech yang meningkatkan brand recall 65%'},
+      {nama:'New Brand Launch', kategori:'Brand Strategy', desc:'Meluncurkan brand FMCG baru yang mencapai 30% market share dalam 6 bulan'},
+      {nama:'Brand Guideline', kategori:'Brand Identity', desc:'Membuat brand guidelines untuk perusahaan properti dengan 5 sub-brand'},
+      {nama:'Rebrand Campaign', kategori:'Brand Activation', desc:'Mengarahkan campaign rebrand yang menjangkau 5M+ audiens'}
+    ],
+    suasana:'Profesional & bersih'
+  },
+  // ===BISNIS & SALES===
+  pm: {
+    nama:'Raka Wirawan', profesi:'Product Manager',
+    tagline:'Mengubah visi menjadi produk yang dicintai pengguna',
+    deskripsi:'Product Manager dengan 5+ tahun pengalaman di produk digital — dari startup tahap awal hingga perusahaan publik. Spesialisasi dalam product strategy, user research, dan data-driven decision making. Telah memimpin pengembangan 5 produk dengan total 1M+ pengguna.',
+    kota:'Jakarta, WIB', jamkerja:'Senin–Jumat, 09.00–18.00',
+    email:'raka.wirawan@email.com', wa:'+6282188889999',
+    ig:'rakawirawan.pm', li:'rakawirawan', gh:'rakawirawan', cv:'#',
+    k1j:'Product Strategy', k1d:'Visi produk yang jelas dengan roadmap yang terukur',
+    k2j:'User-Centric', k2d:'Selalu mengutamakan kebutuhan dan feedback pengguna',
+    k3j:'Cross-Functional', k3d:'Mampu mengkoordinasikan tim engineering, desain, dan bisnis',
+    services:[
+      {nama:'Product Strategy', desc:'Strategi dan roadmap produk yang matang', fitur:'Product vision, Roadmap planning, OKR setting, Market analysis'},
+      {nama:'Product Advisory', desc:'Konsultasi produk untuk startup dan perusahaan', fitur:'Product audit, Feature prioritization, Growth strategy, Team coaching'}
+    ],
+    projects:[
+      {nama:'Super App Launch', kategori:'Product Strategy', desc:'Memimpin pengembangan super app dari 0 hingga 500K pengguna di tahun pertama'},
+      {nama:'Feature Revamp', kategori:'Product Management', desc:'Merombak fitur utama yang meningkatkan engagement pengguna 3x'},
+      {nama:'Product Roadmap', kategori:'Product Strategy', desc:'Membangun roadmap produk 12 bulan yang disetujui oleh board of directors'},
+      {nama:'Growth Initiative', kategori:'Product Growth', desc:'Inisiatif growth yang meningkatkan retention rate dari 30% ke 65%'}
+    ],
+    suasana:'Profesional & bersih'
+  },
+  project: {
+    nama:'Indah Cahyani', profesi:'Project Manager',
+    tagline:'Mengelola proyek kompleks dengan presisi dan ketenangan',
+    deskripsi:'Project Manager bersertifikat PMP dengan 8+ tahun pengalaman mengelola proyek IT, konstruksi, dan event berskala nasional. Spesialisasi dalam Agile dan Waterfall methodology. Track record menyelesaikan 95% proyek tepat waktu dan sesuai anggaran.',
+    kota:'Semarang, WIB', jamkerja:'Senin–Jumat, 08.00–17.00',
+    email:'indah.cahyani@email.com', wa:'+6282244556677',
+    ig:'indahcahyani.pm', li:'indahcahyani', gh:'', cv:'#',
+    k1j:'On-Time Delivery', k1d:'95% proyek selesai tepat waktu dengan kualitas terbaik',
+    k2j:'Risk Management', k2d:'Mengidentifikasi dan memitigasi risiko sebelum menjadi masalah',
+    k3j:'Stakeholder Management', k3d:'Komunikasi efektif dengan semua pemangku kepentingan',
+    services:[
+      {nama:'Project Management', desc:'Manajemen proyek end-to-end', fitur:'Project planning, Timeline management, Budget tracking, Risk mitigation'},
+      {nama:'Agile Coaching', desc:'Coaching tim untuk adopsi metodologi Agile', fitur:'Scrum implementation, Sprint planning, Retrospective, Team facilitation'}
+    ],
+    projects:[
+      {nama:'Software Migration', kategori:'IT Project', desc:'Mengelola migrasi sistem ERP yang melibatkan 30+ departemen dan selesai 2 minggu lebih awal'},
+      {nama:'Event Nasional', kategori:'Event', desc:'Project manager untuk konferensi nasional dengan 3000+ peserta dan 50+ pembicara'},
+      {nama:'Office Renovation', kategori:'Construction', desc:'Mengelola renovasi kantor 5 lantai selesai tepat waktu sesuai budget Rp 15M'},
+      {nama:'Product Launch', kategori:'IT Project', desc:'Koordinasi lintas tim untuk peluncuran produk yang mencapai 100K pengguna di hari pertama'}
+    ],
+    suasana:'Profesional & bersih'
+  },
+  // ===LAINNYA===
+  arsitek: {
+    nama:'Eko Prasetyo', profesi:'Arsitek',
+    tagline:'Merancang ruang yang menginspirasi dan berkelanjutan',
+    deskripsi:'Arsitek dengan 7+ tahun pengalaman dalam desain residensial, komersial, dan interior. Lulusan Arsitektur ITB dengan spesialisasi sustainable design. Telah mengerjakan 30+ proyek dari rumah tinggal hingga gedung perkantoran, dengan fokus pada efisiensi energi dan estetika kontemporer.',
+    kota:'Bandung, WIB', jamkerja:'Senin–Jumat, 08.00–17.00',
+    email:'eko.prasetyo@email.com', wa:'+6281399887766',
+    ig:'ekoprasetyo.arch', li:'ekoprasetyo', gh:'', cv:'#',
+    k1j:'Sustainable Design', k1d:'Desain ramah lingkungan dengan efisiensi energi optimal',
+    k2j:'Space Optimization', k2d:'Memanfaatkan setiap ruang secara maksimal dan fungsional',
+    k3j:'Visual Presentation', k3d:'Presentasi desain yang memukau dengan 3D rendering realistik',
+    services:[
+      {nama:'Desain Arsitektur', desc:'Desain bangunan residensial dan komersial', fitur:'Concept design, Working drawing, 3D rendering, Construction supervision'},
+      {nama:'Desain Interior', desc:'Interior design yang estetis dan fungsional', fitur:'Space planning, Material selection, Furniture design, Lighting design'}
+    ],
+    projects:[
+      {nama:'Rumah Tinggal Modern', kategori:'Residensial', desc:'Rumah tinggal 2 lantai dengan konsep open plan dan taman vertikal'},
+      {nama:'Kantor Startup', kategori:'Komersial', desc:'Desain kantor coworking untuk startup dengan kapasitas 100+ orang'},
+      {nama:'Villa Resort', kategori:'Hospitality', desc:'Desain 5 unit villa dengan arsitektur tropis modern di daerah pegunungan'},
+      {nama:'Kafe Konseptual', kategori:'Interior', desc:'Desain interior kafe dengan konsep industrial yang menjadi ikon kota'}
+    ],
+    suasana:'Modern & techy'
+  }
+};
+
+function loadDemoData(key) {
+  if (!key) return;
+  const d = DEMO_DATA[key];
+  if (!d) return;
+  ['nama','profesi','tagline','deskripsi','kota','jamkerja','email','wa','ig','li','gh','cv','k1j','k1d','k2j','k2d','k3j','k3d'].forEach(f => {
+    const el = document.getElementById(f);
+    if (el) el.value = d[f] || '';
+  });
+  document.getElementById('services-container').innerHTML = '';
+  serviceIndex = 0;
+  d.services.forEach(s => addService(s.nama, s.desc, s.fitur));
+  document.getElementById('projects-container').innerHTML = '';
+  projectIndex = 0;
+  d.projects.forEach(p => addProject(p.nama, p.kategori, p.desc));
+  if (d.suasana) document.getElementById('suasana').value = d.suasana;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
