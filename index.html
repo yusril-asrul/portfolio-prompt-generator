@@ -863,6 +863,9 @@ const THEMES = [
   {name:'Warm Editorial', type:'Terang',  colors:['#FAF8F3','#F2EDE4','#92400E']},
   {name:'Blush & Clay',   type:'Terang',  colors:['#FDF4F4','#F9E8E8','#BE123C']},
   {name:'Arctic Clean',   type:'Terang',  colors:['#F8FAFB','#EEF4F8','#0369A1']},
+  {name:'Neon Synth',     type:'Gelap',   colors:['#0B0A1A','#1A1844','#00F0FF','#FF00AA','#FFD700']},
+  {name:'Ocean Depths',   type:'Gelap',   colors:['#020B1A','#051A3A','#0D47A1','#00BCD4','#80DEEA']},
+  {name:'Desert Sands',   type:'Terang',  colors:['#FEF9EF','#FDE9D0','#E6A871','#C26D3C','#5C2E14']},
 ];
 
 /* ===RENDER THEMES=== */
@@ -1064,8 +1067,11 @@ function buildColorSection() {
   const hasCustom = palette && palette.startsWith('#');
 
   if (selectedTheme && !hasCustom) {
+    const theme = THEMES.find(t => t.name === selectedTheme);
+    const hexList = theme ? theme.colors.join(', ') : '(tidak diketahui)';
     return `Tema pilihan  : ${selectedTheme}
-(Gunakan tema ini — pilih dan interpretasikan nilai HEX yang paling tepat untuk setiap elemen)`;
+Palette HEX   : ${hexList}
+(Gunakan tema ini — aplikasikan warna HEX di atas ke elemen-elemen yang sesuai: background, teks, aksen, border, dll)`;
   }
   if (hasCustom) {
     return `Palette warna pilihan (gunakan warna-warna ini secara fleksibel di seluruh elemen — atur sendiri mana untuk bg, teks, aksen, dll):
